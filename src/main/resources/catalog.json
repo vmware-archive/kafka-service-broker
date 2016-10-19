@@ -1,0 +1,38 @@
+{
+  "services":[
+    {
+      "id":"aUniqueId",
+      "name":"hello",
+      "description":"Friendly service that greets you",
+      "bindable": true,
+      "tags":[
+        "hello"
+      ],
+      "metadata":{
+        "displayName":"Hello",
+        "imageUrl":"https://github.com/cf-platform-eng/simple-service-broker/blob/example/resources/pivotal.png",
+        "longDescription":"Hello from the cloud",
+        "providerDisplayName":"Pivotal",
+        "documentationUrl":"https://docs.cloudfoundry.org/services/api.html"
+      },
+      "plans":[
+        {
+          "id":"anotherUniqueId",
+          "name":"hi",
+          "description":"An informal hello",
+          "metadata": {
+            "cost": 0,
+            "bullets": [{
+              "content": "straight-forward"
+            }, {
+              "content": "to the point"
+            }, {
+              "content": "40 concurrent connections"
+            }]
+          },
+          "free": true
+        }
+      ]
+    }
+  ]
+}

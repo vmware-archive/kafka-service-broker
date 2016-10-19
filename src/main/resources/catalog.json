@@ -1,33 +1,33 @@
 {
   "services":[
     {
-      "id":"aUniqueId",
-      "name":"hello",
-      "description":"Friendly service that greets you",
+      "id":"kafkaPivotal",
+      "name":"KafkaService",
+      "description":"Kafka Service Broker for Pivotal Cloud Foundry",
       "bindable": true,
       "tags":[
-        "hello"
+        "kafka"
       ],
       "metadata":{
-        "displayName":"Hello",
-        "imageUrl":"https://github.com/cf-platform-eng/simple-service-broker/blob/example/resources/pivotal.png",
-        "longDescription":"Hello from the cloud",
+        "displayName":"Kafka Service",
+        "imageUrl":"https://svn.apache.org/repos/asf/kafka/site/logos/originals/png/ICON%20-%20Black%20on%20Transparent.png",
+        "longDescription":"Kafka Service Broker for Pivotal Cloud Foundry",
         "providerDisplayName":"Pivotal",
         "documentationUrl":"https://docs.cloudfoundry.org/services/api.html"
       },
       "plans":[
         {
-          "id":"anotherUniqueId",
-          "name":"hi",
-          "description":"An informal hello",
+          "id":"kafkaManyToMany",
+          "name":"ManyToMany",
+          "description":"Many pubs, Many subs",
           "metadata": {
             "cost": 0,
             "bullets": [{
-              "content": "straight-forward"
+              "content": "Multiple publishers"
             }, {
-              "content": "to the point"
+              "content": "Multiple subscribers"
             }, {
-              "content": "40 concurrent connections"
+              "content": "Dynamic topic creation"
             }]
           },
           "free": true

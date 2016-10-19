@@ -4,8 +4,6 @@ import io.pivotal.cf.servicebroker.model.ServiceBinding;
 import io.pivotal.cf.servicebroker.model.ServiceInstance;
 import io.pivotal.cf.servicebroker.service.DefaultServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.cloud.servicebroker.exception.ServiceBrokerException;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -26,15 +24,15 @@ import java.util.Map;
 @Slf4j
 public class KafkaBroker extends DefaultServiceImpl {
 
-//    public KafkaBroker(HelloBrokerRepository helloRepository, Environment env) {
-//        super();
-//        this.helloRepository = helloRepository;
-//        this.env = env;
-//    }
-//
-//    private Environment env;
-//
-//    private HelloBrokerRepository helloRepository;
+    public KafkaBroker(Environment env, KafkaClient client) {
+        super();
+        this.env = env;
+        this.client = client;
+    }
+
+    private Environment env;
+
+    private KafkaClient client;
 
     /**
      * Add code here and it will be run during the create-service process. This might include
@@ -50,20 +48,14 @@ public class KafkaBroker extends DefaultServiceImpl {
         //TODO use  creds to talk to service?
         //TODO security
 
-        //connect to zookeeper
-        //create a new topic with instance id, user passes in name, get it from instance param
-        //gather info returned from kafka, add to instance for later
+        Object name = instance.getParameters().get("topicName");
+        if(name == null) {
+            name = instance.getId();
+        }
 
-        log.info("provisioning broker user: " + instance.getId());
+        log.info("creating topic: " + name.toString());
 
-//        try {
-//            User user = helloRepository.provisionUser(new User(instance.getId(), User.Role.Broker));
-//            instance.addParameter("user", user);
-//            log.info("broker user: " + user.getName() + " created.");
-//        } catch (Throwable t) {
-//            log.error(t.getMessage(), t);
-//            throw new ServiceBrokerException(t);
-//        }
+        client.sendMessage(name.toString(), "creating topic");
     }
 
     /**

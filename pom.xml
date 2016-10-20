@@ -27,7 +27,7 @@
         </dependency>
 
 
-        <dependency>
+        <!--dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
             <version>0.10.0.1</version>
@@ -43,6 +43,12 @@
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_2.11</artifactId>
             <version>0.10.0.1</version>
+        </dependency-->
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>1.0.1.RELEASE</version>
         </dependency>
 
     </dependencies>

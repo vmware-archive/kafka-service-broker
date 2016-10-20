@@ -55,7 +55,8 @@ public class KafkaBroker extends DefaultServiceImpl {
 
         log.info("creating topic: " + name.toString());
 
-        client.sendMessage(name.toString(), "creating topic");
+        //client.sendMessage(name.toString(), "creating topic");
+        client.createTopic(name.toString());
     }
 
     /**
@@ -68,9 +69,13 @@ public class KafkaBroker extends DefaultServiceImpl {
     @Override
     public void deleteInstance(ServiceInstance instance) throws ServiceBrokerException {
         //TODO use admin creds to talk to service
+
         log.info("deprovisioning broker user: " + instance.getId());
 
         //call out to kafka to delete the topic
+
+        client.deleteTopic(instance.getParameters().get("topicName").toString());
+
 
 
 
@@ -101,16 +106,6 @@ public class KafkaBroker extends DefaultServiceImpl {
 
         //future: re-config topics, security settings?
 
-//        try {
-//            User user = (User) instance.getParameter("user");
-//            user = helloRepository.updateUser(user.getName(), user);
-//            instance.getParameters().put("user", user);
-//
-//            log.info("broker user: " + user.getName() + " updated.");
-//        } catch (Throwable t) {
-//            log.error(t.getMessage(), t);
-//            throw new ServiceBrokerException(t);
-//        }
     }
 
     /**
@@ -130,9 +125,14 @@ public class KafkaBroker extends DefaultServiceImpl {
     @Override
     public void createBinding(ServiceInstance instance, ServiceBinding binding) throws ServiceBrokerException {
         //TODO use admin creds to talk to service
+        // use app guid to send bind request
+        //don't need to talk to kafka, just return credentials.
+
+
         log.info("provisioning user: " + binding.getId());
 
-        //don't need to talk to kafka, just return credentials.
+
+
 
 //        try {
 //            User user = helloRepository.provisionUser(new User(binding.getId(), User.Role.User));

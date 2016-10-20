@@ -55,8 +55,7 @@ public class KafkaBroker extends DefaultServiceImpl {
 
         log.info("creating topic: " + name.toString());
 
-        //client.sendMessage(name.toString(), "creating topic");
-        client.createTopic(name.toString());
+        client.sendMessage(name.toString(), "creating topic");
     }
 
     /**
@@ -73,22 +72,7 @@ public class KafkaBroker extends DefaultServiceImpl {
         log.info("deprovisioning broker user: " + instance.getId());
 
         //call out to kafka to delete the topic
-
         client.deleteTopic(instance.getParameters().get("topicName").toString());
-
-
-
-
-//        try {
-//            User user = (User) instance.getParameter("user");
-//            helloRepository.deprovisionUser(user.getName());
-//            instance.getParameters().remove("user");
-//
-//            log.info("broker user: " + user.getName() + " deleted.");
-//        } catch (Throwable t) {
-//            log.error(t.getMessage(), t);
-//            throw new ServiceBrokerException(t);
-//        }
     }
 
     /**
@@ -127,22 +111,7 @@ public class KafkaBroker extends DefaultServiceImpl {
         //TODO use admin creds to talk to service
         // use app guid to send bind request
         //don't need to talk to kafka, just return credentials.
-
-
         log.info("provisioning user: " + binding.getId());
-
-
-
-
-//        try {
-//            User user = helloRepository.provisionUser(new User(binding.getId(), User.Role.User));
-//            binding.getParameters().put("user", user);
-//
-//            log.info("user: " + user.getName() + " created.");
-//        } catch (Throwable t) {
-//            log.error(t.getMessage(), t);
-//            throw new ServiceBrokerException(t);
-//        }
     }
 
     /**
@@ -158,17 +127,6 @@ public class KafkaBroker extends DefaultServiceImpl {
         log.info("deprovisioning user: " + binding.getId());
 
         //nothing to do, just remove binding
-//
-//        try {
-//            User user = (User) binding.getParameter("user");
-//            helloRepository.deprovisionUser(user.getName());
-//            binding.getParameters().remove("user");
-//
-//            log.info("user: " + user.getName() + " deleted.");
-//        } catch (Throwable t) {
-//            log.error(t.getMessage(), t);
-//            throw new ServiceBrokerException(t);
-//        }
     }
 
     /**

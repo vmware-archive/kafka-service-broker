@@ -23,6 +23,7 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 import org.springframework.kafka.listener.MessageListener;
 import org.springframework.kafka.listener.config.ContainerProperties;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -37,13 +38,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = TestConfig.class)
 public class KafkaSpringTest {
 
     private static final Logger log = Logger.getLogger(KafkaSpringTest.class);
 
+//    @Autowired
+//    private KafkaClient client;
+
     @Autowired
-    private KafkaClient client;
+    KafkaTemplate<Integer, String> template;
 
     @Test
     public void testProducerConsumer() throws ServiceBrokerException, InterruptedException {
@@ -63,11 +67,11 @@ public class KafkaSpringTest {
         container.setBeanName("testAuto");
         container.start();
         Thread.sleep(1000); // wait a bit for the container to start
-        KafkaTemplate<Integer, String> template = createTemplate();
+        //KafkaTemplate<Integer, String> template = createTemplate();
         template.setDefaultTopic("topic1");
-        template.sendDefault(0, "foo");
-        template.sendDefault(2, "bar");
-        template.sendDefault(0, "baz");
+        template.sendDefault("foo");
+        template.sendDefault("bar");
+        template.sendDefault("baz");
         template.sendDefault(2, "qux");
         template.flush();
         assertTrue(latch.await(60, TimeUnit.SECONDS));

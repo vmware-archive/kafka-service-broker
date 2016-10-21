@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.servicebroker.exception.ServiceBrokerException;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Map;
@@ -21,7 +22,7 @@ import static org.junit.Assert.assertFalse;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = TestConfig.class)
 @Ignore
 public class KafkaBrokerTest {
 
@@ -36,11 +37,6 @@ public class KafkaBrokerTest {
 
     @Autowired
     private ServiceBinding serviceBinding;
-
-    @Before
-    public void setUp() {
-        serviceInstance.getParameters().remove("user");
-    }
 
     @Test
     public void testProvision() throws ServiceBrokerException {

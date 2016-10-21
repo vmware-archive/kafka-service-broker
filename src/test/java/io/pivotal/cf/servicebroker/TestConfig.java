@@ -6,13 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.IntegerDeserializer;
-import org.apache.kafka.common.serialization.IntegerSerializer;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -27,27 +27,34 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 @Configuration
+@PropertySource("classpath:application.properties")
 @Slf4j
 class TestConfig {
 
+    @Autowired
+    private Environment env;
+
     @Bean
-    public KafkaTemplate<Integer, String> template() {
+    public KafkaTemplate<Integer, String> template() throws ClassNotFoundException {
         ProducerFactory<Integer, String> pf =
-                new DefaultKafkaProducerFactory<Integer, String>(senderProperties());
-        KafkaTemplate<Integer, String> template = new KafkaTemplate<>(pf);
-        return template;
+                new DefaultKafkaProducerFactory<>(senderProperties());
+        return new KafkaTemplate<>(pf);
     }
 
     @Bean
-    public Map<String, Object> senderProperties() {
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    private Map<String, Object> senderProperties() throws ClassNotFoundException {
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ProducerConfig.RETRIES_CONFIG, 0);
-        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
-        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, env.getProperty("BOOTSTRAP_SERVERS_CONFIG"));
+        props.put(ProducerConfig.RETRIES_CONFIG, env.getProperty("RETRIES_CONFIG"));
+        props.put(ProducerConfig.BATCH_SIZE_CONFIG, env.getProperty("BATCH_SIZE_CONFIG"));
+        props.put(ProducerConfig.LINGER_MS_CONFIG, env.getProperty("LINGER_MS_CONFIG"));
+        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, env.getProperty("BUFFER_MEMORY_CONFIG"));
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, Class.forName(env.getProperty("KEY_SERIALIZER_CLASS_CONFIG")));
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Class.forName(env.getProperty("VALUE_SERIALIZER_CLASS_CONFIG")));
         return props;
     }
 
@@ -57,7 +64,7 @@ class TestConfig {
     }
 
     @Bean
-    public KafkaMessageListenerContainer<Integer, String> container() {
+    public KafkaMessageListenerContainer<Integer, String> container() throws ClassNotFoundException {
         ContainerProperties containerProperties = new ContainerProperties("topic1", "topic2");
 
         Map<String, Object> props = consumerProps();
@@ -79,16 +86,15 @@ class TestConfig {
         return container;
     }
 
-    @Bean
-    public Map<String, Object> consumerProps() {
+    private Map<String, Object> consumerProps() throws ClassNotFoundException {
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
-        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
-        props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "15000");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, env.getProperty("BOOTSTRAP_SERVERS_CONFIG"));
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, env.getProperty("GROUP_ID_CONFIG"));
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, env.getProperty("ENABLE_AUTO_COMMIT_CONFIG"));
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, env.getProperty("AUTO_COMMIT_INTERVAL_MS_CONFIG"));
+        props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, env.getProperty("SESSION_TIMEOUT_MS_CONFIG"));
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, Class.forName(env.getProperty("KEY_DESERIALIZER_CLASS_CONFIG")));
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, Class.forName(env.getProperty("VALUE_DESERIALIZER_CLASS_CONFIG")));
         return props;
     }
 

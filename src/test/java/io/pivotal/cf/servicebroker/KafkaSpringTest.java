@@ -10,7 +10,6 @@ import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -23,9 +22,6 @@ public class KafkaSpringTest {
 
     @Autowired
     private KafkaTemplate<Integer, String> template;
-
-    @Autowired
-    private Map<String, Object> senderProps;
 
     @Autowired
     private KafkaMessageListenerContainer<Integer, String> container;

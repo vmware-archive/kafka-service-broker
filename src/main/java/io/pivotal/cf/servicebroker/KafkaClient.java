@@ -1,37 +1,38 @@
 package io.pivotal.cf.servicebroker;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.springframework.core.env.Environment;
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.ZooKeeper;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Properties;
+import java.io.IOException;
+import java.util.List;
 
 @Service
 @Slf4j
-public class KafkaClient {
+class KafkaClient {
 
-    private Environment env;
     private KafkaTemplate<Integer, String> template;
+    private ZooKeeper zooKeeper;
 
-    public KafkaClient(Environment env, KafkaTemplate<Integer, String> template) {
-        this.env = env;
+    public KafkaClient(KafkaTemplate<Integer, String> template, ZooKeeper zooKeeper) {
         this.template = template;
+        this.zooKeeper = zooKeeper;
     }
 
-    public void sendMessage(String topicName, String message) {
+    void sendMessage(String topicName, String message) {
         template.setDefaultTopic(topicName);
         template.sendDefault(message);
+        template.flush();
     }
 
-    public void deleteTopic(String topicName) {
-
-//        ZkUtils zkUtils = new ZkUtils(getZookeeperClient(), new ZkConnection(env.getProperty("ZOOKEEPER_HOST")), false);
+    void deleteTopic(String topicName) {
 //        AdminUtils.deleteTopic(zkUtils, topicName);
+    }
 
+
+    List<String> listTopics() throws IOException, KeeperException, InterruptedException {
+        return zooKeeper.getChildren("/brokers/topics", false);
     }
 }

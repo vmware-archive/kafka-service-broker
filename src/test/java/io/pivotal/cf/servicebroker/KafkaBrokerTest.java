@@ -3,34 +3,25 @@ package io.pivotal.cf.servicebroker;
 import io.pivotal.cf.servicebroker.model.ServiceBinding;
 import io.pivotal.cf.servicebroker.model.ServiceInstance;
 import io.pivotal.cf.servicebroker.service.BrokeredService;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.servicebroker.exception.ServiceBrokerException;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Map;
 
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
-@Ignore
+@SpringBootTest
 public class KafkaBrokerTest {
 
-//    @MockBean
-//    private HelloBrokerRepository helloBrokerRepository;
-
     @Autowired
-    private BrokeredService helloBroker;
+    private BrokeredService kafkaBroker;
 
     @Autowired
     private ServiceInstance serviceInstance;
@@ -39,81 +30,46 @@ public class KafkaBrokerTest {
     private ServiceBinding serviceBinding;
 
     @Test
-    public void testProvision() throws ServiceBrokerException {
-//        given(this.helloBrokerRepository.provisionUser(instanceUser))
-//                .willReturn(new User(instanceUser.getName(), TestConfig.PASSWORD, instanceUser.getRole()));
-//
-//        helloBroker.createInstance(serviceInstance);
-//
-//        User user = (User) serviceInstance.getParameters().get("user");
-//        assertNotNull(user);
-//        assertEquals(TestConfig.SI_ID, user.getName());
-//        assertEquals(User.Role.Broker, user.getRole());
-//        assertEquals(TestConfig.PASSWORD, user.getPassword());
+    public void testCreateInstance() throws ServiceBrokerException {
+        kafkaBroker.createInstance(serviceInstance);
+        Object o = serviceInstance.getParameters().get(KafkaBroker.TOPIC_NAME_KEY);
+        assertNotNull(o);
+        assertEquals(TestConfig.SI_ID, o.toString());
+
+        serviceInstance.getParameters().put(KafkaBroker.TOPIC_NAME_KEY, "myTopic");
+        o = serviceInstance.getParameters().get(KafkaBroker.TOPIC_NAME_KEY);
+        assertNotNull(o);
+        assertEquals("myTopic", o.toString());
     }
 
     @Test
-    public void testDeprovision() throws ServiceBrokerException {
-//        serviceInstance.getParameters().put("user", instanceUser);
-//
-//        helloBroker.deleteInstance(serviceInstance);
-//        assertFalse(serviceInstance.getParameters().containsKey("user"));
+    public void testDeleteInstance() throws ServiceBrokerException {
+        kafkaBroker.deleteInstance(serviceInstance);
     }
 
     @Test
-    public void testBinding() {
-//        given(this.helloBrokerRepository.provisionUser(bindingUser))
-//                .willReturn(new User(bindingUser.getName(), TestConfig.PASSWORD, bindingUser.getRole()));
-//
-//        helloBroker.createBinding(serviceInstance, serviceBinding);
-//
-//        User user = (User) serviceBinding.getParameters().get("user");
-//        assertNotNull(user);
-//        assertEquals(TestConfig.SB_ID, user.getName());
-//        assertEquals(User.Role.User, user.getRole());
-//        assertEquals(TestConfig.PASSWORD, user.getPassword());
+    public void testUpdateInstance() throws ServiceBrokerException {
+        kafkaBroker.updateInstance(serviceInstance);
+    }
+
+    @Test
+    public void testCreateBinding() {
+        kafkaBroker.createBinding(serviceInstance, serviceBinding);
     }
 
     @Test
     public void testDeleteBinding() {
-//        serviceBinding.getParameters().put("user", bindingUser);
-//
-//        helloBroker.deleteBinding(serviceInstance, serviceBinding);
-//        assertFalse(serviceBinding.getParameters().containsKey("user"));
+        kafkaBroker.deleteBinding(serviceInstance, serviceBinding);
     }
 
     @Test
-    public void testCredentials() {
-//        bindingUser.setPassword(TestConfig.PASSWORD);
-//        serviceBinding.getParameters().put("user", bindingUser);
-//
-//        Map<String, Object> m = helloBroker.getCredentials(serviceInstance, serviceBinding);
-//        assertNotNull(m);
-//        assertEquals("localhost", m.get("hostname"));
-//        assertEquals("8080", m.get("port"));
-//        assertEquals(TestConfig.SB_ID, m.get("username"));
-//        assertEquals(TestConfig.PASSWORD, m.get("password"));
-//        assertEquals("hello://sbId:password@localhost:8080", m.get("uri"));
+    public void testGetCredentials() {
+        Map<String, Object> m = kafkaBroker.getCredentials(serviceInstance, serviceBinding);
+        assertNotNull(m);
     }
 
     @Test
     public void testAsync() {
-        assertFalse(helloBroker.isAsync());
-    }
-
-    @Test
-    public void testInstanceUpdate() {
-//        given(this.helloBrokerRepository.updateUser(instanceUser.getName(), instanceUser))
-//                .willReturn(new User(instanceUser.getName(), "newPassword", instanceUser.getRole()));
-//
-//        serviceInstance.getParameters().put("user", instanceUser);
-//
-//        helloBroker.updateInstance(serviceInstance);
-//
-//        User user = (User) serviceInstance.getParameters().get("user");
-//        assertNotNull(user);
-//        assertEquals(TestConfig.SI_ID, user.getName());
-//        assertEquals(User.Role.Broker, user.getRole());
-//        assertEquals("newPassword", user.getPassword());
+        assertFalse(kafkaBroker.isAsync());
     }
 }

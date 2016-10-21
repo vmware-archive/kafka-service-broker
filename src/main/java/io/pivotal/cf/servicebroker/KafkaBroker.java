@@ -24,6 +24,8 @@ import java.util.Map;
 @Slf4j
 public class KafkaBroker extends DefaultServiceImpl {
 
+    public static final String TOPIC_NAME_KEY = "topicName";
+
     public KafkaBroker(Environment env, KafkaClient client) {
         super();
         this.env = env;
@@ -48,14 +50,14 @@ public class KafkaBroker extends DefaultServiceImpl {
         //TODO use  creds to talk to service?
         //TODO security
 
-        Object name = instance.getParameters().get("topicName");
+        Object name = instance.getParameters().get(TOPIC_NAME_KEY);
         if(name == null) {
             name = instance.getId();
+            instance.getParameters().put(TOPIC_NAME_KEY, name);
         }
 
         log.info("creating topic: " + name.toString());
-
-        client.sendMessage(name.toString(), "creating topic");
+        client.sendMessage(name.toString(), "creating topic: " + name);
     }
 
     /**
@@ -72,7 +74,7 @@ public class KafkaBroker extends DefaultServiceImpl {
         log.info("deprovisioning broker user: " + instance.getId());
 
         //call out to kafka to delete the topic
-        client.deleteTopic(instance.getParameters().get("topicName").toString());
+        client.deleteTopic(instance.getParameters().get(TOPIC_NAME_KEY).toString());
     }
 
     /**
@@ -111,7 +113,7 @@ public class KafkaBroker extends DefaultServiceImpl {
         //TODO use admin creds to talk to service
         // use app guid to send bind request
         //don't need to talk to kafka, just return credentials.
-        log.info("provisioning user: " + binding.getId());
+        log.info("binding app: " + binding.getAppGuid() + " to topic: " + instance.getParameters().get(TOPIC_NAME_KEY));
     }
 
     /**
@@ -124,9 +126,7 @@ public class KafkaBroker extends DefaultServiceImpl {
     @Override
     public void deleteBinding(ServiceInstance instance, ServiceBinding binding) throws ServiceBrokerException {
         //TODO use admin creds to talk to service
-        log.info("deprovisioning user: " + binding.getId());
-
-        //nothing to do, just remove binding
+        log.info("unbinding app: " + binding.getAppGuid() + " from topic: " + instance.getParameters().get(TOPIC_NAME_KEY));
     }
 
     /**

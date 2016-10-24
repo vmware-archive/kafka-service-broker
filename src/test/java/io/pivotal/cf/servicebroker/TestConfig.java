@@ -6,9 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.zookeeper.WatchedEvent;
-import org.apache.zookeeper.Watcher;
-import org.apache.zookeeper.ZooKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.servicebroker.model.CreateServiceInstanceBindingRequest;
@@ -27,7 +24,6 @@ import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 import org.springframework.kafka.listener.MessageListener;
 import org.springframework.kafka.listener.config.ContainerProperties;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -37,7 +33,7 @@ import java.util.concurrent.CountDownLatch;
 @Slf4j
 class TestConfig {
 
-    static final String SI_ID = "siId";
+    private static final String SI_ID = "siId";
     private static final String SB_ID = "sbId";
 
     private static final String SD_ID = "aUniqueId";
@@ -157,25 +153,4 @@ class TestConfig {
         req.withServiceInstanceId(SI_ID);
         return req;
     }
-
-    @Bean
-    public ZooKeeper zooKeeper() throws IOException {
-        return new ZooKeeper(env.getProperty("ZOOKEEPER_HOST"), Integer.parseInt(env.getProperty("ZOOKEEPER_TIMEOUT")), new Watcher() {
-            @Override
-            public void process(WatchedEvent event) {
-                log.info("watching: " + event.toString());
-            }
-        });
-    }
-
-//    @Bean
-//    public ZkUtils zkUtils() {
-//        ZkClient zkClient = new ZkClient(
-//                env.getProperty("ZOOKEEPER_HOST"),
-//                10000,
-//                8000,
-//                ZKStringSerializer$.MODULE$);
-//
-//        return new ZkUtils(zkClient, new ZkConnection(env.getProperty("ZOOKEEPER_HOST")), false);
-//    }
 }

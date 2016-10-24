@@ -30,20 +30,20 @@ public class KafkaBrokerTest {
     private ServiceBinding serviceBinding;
 
     @Test
-    public void testCreateInstance() throws ServiceBrokerException {
-        kafkaBroker.createInstance(serviceInstance);
+    public void testCreateAndDeleteInstance() throws ServiceBrokerException {
+        serviceInstance.getParameters().put(KafkaBroker.TOPIC_NAME_KEY, "myTopic");
         Object o = serviceInstance.getParameters().get(KafkaBroker.TOPIC_NAME_KEY);
         assertNotNull(o);
-        assertEquals(TestConfig.SI_ID, o.toString());
+        assertEquals("myTopic", o.toString());
 
-        serviceInstance.getParameters().put(KafkaBroker.TOPIC_NAME_KEY, "myTopic");
+        String topicName = "topic" + System.currentTimeMillis();
+        serviceInstance.getParameters().put(KafkaBroker.TOPIC_NAME_KEY, topicName);
+
+        kafkaBroker.createInstance(serviceInstance);
         o = serviceInstance.getParameters().get(KafkaBroker.TOPIC_NAME_KEY);
         assertNotNull(o);
-        assertEquals("myTopic", o.toString());
-    }
+        assertEquals(topicName, o.toString());
 
-    @Test
-    public void testDeleteInstance() throws ServiceBrokerException {
         kafkaBroker.deleteInstance(serviceInstance);
     }
 

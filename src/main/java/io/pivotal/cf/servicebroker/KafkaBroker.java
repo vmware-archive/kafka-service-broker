@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class KafkaBroker extends DefaultServiceImpl {
+class KafkaBroker extends DefaultServiceImpl {
 
     public static final String TOPIC_NAME_KEY = "topicName";
 
@@ -51,7 +51,7 @@ public class KafkaBroker extends DefaultServiceImpl {
         //TODO security
 
         Object name = instance.getParameters().get(TOPIC_NAME_KEY);
-        if(name == null) {
+        if (name == null) {
             name = instance.getId();
             instance.getParameters().put(TOPIC_NAME_KEY, name);
         }
@@ -145,37 +145,21 @@ public class KafkaBroker extends DefaultServiceImpl {
     @Override
     public Map<String, Object> getCredentials(ServiceInstance instance, ServiceBinding binding) throws
             ServiceBrokerException {
-        log.info("returning creds.");
+        log.info("returning credentials.");
 
-//        //producer stuff: more?
-//        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
-//        configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.ByteArraySerializer");
-//        configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
+        Map<String, Object> m = new HashMap<>();
+        String[] s = env.getProperty("ZOOKEEPER_HOST").split(":");
+        m.put("hostname", s[0]);
+        m.put("port", s[1]);
+        m.put(TOPIC_NAME_KEY, instance.getParameters().get(TOPIC_NAME_KEY));
+//        m.put("username", user.getName());
+//        m.put("password", user.getPassword());
 //
-//        //consumer stuff: more?
-//        configProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-//        configProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-//        configProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-//        configProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
-//        configProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, "simple");
+//        String uri = "hello://" + m.get("username") + ":" + m.get("password") + "@" + m.get("hostname") + ":" + m.get("port");
 
-//        try {
-//            User user = (User) binding.getParameters().get("user");
-//
-            Map<String, Object> m = new HashMap<>();
-//            m.put("hostname", env.getProperty("HELLO_HOST"));
-//            m.put("port", env.getProperty("HELLO_PORT"));
-//            m.put("username", user.getName());
-//            m.put("password", user.getPassword());
-//
-//            String uri = "hello://" + m.get("username") + ":" + m.get("password") + "@" + m.get("hostname") + ":" + m.get("port");
-//            m.put("uri", uri);
-//
-            return m;
-//        } catch (Throwable t) {
-//            log.error(t.getMessage(), t);
-//            throw new ServiceBrokerException(t);
-//        }
+        String uri = "kafka://" + m.get("hostname") + ":" + m.get("port") + "/" + m.get(TOPIC_NAME_KEY);
+        m.put("uri", uri);
+        return m;
     }
 
     @Override

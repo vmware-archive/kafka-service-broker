@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("cloud")
-public class CloudConfig {
+public class CloudConfig{
+
 
 }
+

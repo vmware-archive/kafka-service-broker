@@ -57,7 +57,13 @@ class KafkaBroker extends DefaultServiceImpl {
         }
 
         log.info("creating topic: " + name.toString());
-        client.sendMessage(name.toString(), "creating topic: " + name);
+        try{
+            client.createTopic(name.toString());
+            //client.sendMessage(name.toString(), "creating topic: " + name);
+        }catch(Throwable throwable){
+            throw new KafkaBrokerException(throwable);
+        }
+
     }
 
     /**

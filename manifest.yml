@@ -4,15 +4,15 @@ applications:
   memory: 512M
   instances: 1
   buildpack: java_buildpack_offline
-  path: target/kafka-broker-1.0.0.jar
-  services: [ kafka-broker-ds ]
+  path: target/confluent-kafka-broker-0.0.1.jar
+  services: [ redis-for-kafka ]
   env:
     SPRING_PROFILES_ACTIVE: cloud
     API_VERSION: 2.9
-    KEY_SERIALIZER_CLASS_CONFIG: org.apache.kafka.common.serialization.ByteArraySerializer
-    VALUE_SERIALIZER_CLASS_CONFIG: org.apache.kafka.common.serialization.StringSerializer
-    BOOTSTRAP_SERVERS_CONFIG: localhost:9092
-    KEY_DESERIALIZER_CLASS_CONFIG: org.apache.kafka.common.serialization.StringDeserializer
-    VALUE_DESERIALIZER_CLASS_CONFIG: org.apache.kafka.common.serialization.StringDeserializer
-    GROUP_ID_CONFIG: test
-    CLIENT_ID_CONFIG: simple
+
+    BOOTSTRAP_SERVERS_CONFIG: 107.23.42.75:9092
+    ZOOKEEPER_HOST: 54.242.77.150:2181
+    ZOOKEEPER_TIMEOUT: 10000
+
+
+

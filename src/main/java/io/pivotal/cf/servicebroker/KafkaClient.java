@@ -17,24 +17,13 @@ import java.util.List;
 
 @Service
 @Slf4j
-class KafkaClient {
+public class KafkaClient {
 
-    private KafkaTemplate<Integer, String> template;
+
     private Environment env;
 
-    public KafkaClient(KafkaTemplate<Integer, String> template, Environment env) {
-        this.template = template;
+    public KafkaClient(Environment env) {
         this.env = env;
-    }
-
-    void sendMessage(String topicName, String message) {
-        template.setDefaultTopic(topicName);
-        template.sendDefault(message);
-        template.flush();
-    }
-
-    void createTopic(String topicName) {
-        sendMessage(topicName, "creating topic");
     }
 
     void deleteTopic(String topicName) {
@@ -45,6 +34,21 @@ class KafkaClient {
             ZkClient zc = new ZkClient(con);
             zu = new ZkUtils(zc, con, false);
             TopicCommand.deleteTopic(zu, new TopicCommand.TopicCommandOptions(new String[]{"--topic", topicName}));
+        } finally {
+            if (zu != null) {
+                zu.close();
+            }
+        }
+    }
+
+    void createTopic(String topicName) {
+        ZkUtils zu = null;
+
+        try {
+            ZkConnection con = new ZkConnection(env.getProperty("ZOOKEEPER_HOST"), Integer.parseInt(env.getProperty("ZOOKEEPER_TIMEOUT")));
+            ZkClient zc = new ZkClient(con);
+            zu = new ZkUtils(zc, con, false);
+            TopicCommand.createTopic(zu, new TopicCommand.TopicCommandOptions(new String[]{"--topic", topicName, "--partitions" , "1", "--replication-factor", "1"}));
         } finally {
             if (zu != null) {
                 zu.close();

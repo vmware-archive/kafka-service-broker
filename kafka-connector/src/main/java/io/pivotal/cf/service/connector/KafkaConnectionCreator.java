@@ -9,7 +9,12 @@ public class KafkaConnectionCreator extends AbstractServiceConnectorCreator<Kafk
 
     @Override
     public KafkaRepository create(KafkaServiceInfo serviceInfo, ServiceConnectorConfig serviceConnectorConfig) {
-        log.debug("creating hello repo wth service info: " + serviceInfo);
-        return new KafkaRepositoryFactory().create(serviceInfo);
+        log.info("creating kafka repo wth service info: " + serviceInfo);
+        try {
+            return new KafkaRepositoryFactory().create(serviceInfo);
+        } catch (InterruptedException e) {
+            log.error(e.getLocalizedMessage(), e);
+            return null;
+        }
     }
 }

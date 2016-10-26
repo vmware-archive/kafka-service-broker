@@ -38,7 +38,7 @@ class ConsumerLoop implements Callable {
         this.topics = topics;
         this.lastExpectedMessages = terminationMessages;
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
+        props.put("bootstrap.servers", "54.242.77.150:9092");
         props.put("group.id", groupId);
         props.put("key.deserializer", StringDeserializer.class.getName());
         props.put("value.deserializer", StringDeserializer.class.getName());
@@ -114,7 +114,7 @@ public class JointProducerConsumer {
 
         // Assemble properties
         Properties producerProps = new Properties();
-        producerProps.put("bootstrap.servers", "localhost:9092");
+        producerProps.put("bootstrap.servers", "54.242.77.150:9092");
         producerProps.put("acks", "all");
         producerProps.put("retries", 0);
         producerProps.put("batch.size", 16384);

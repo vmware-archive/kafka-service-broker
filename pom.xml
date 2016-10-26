@@ -12,6 +12,7 @@
     <modules>
         <module>kafka-broker</module>
         <module>kafka-connector</module>
+        <module>kafka-sample-app</module>
     </modules>
 
     <parent>

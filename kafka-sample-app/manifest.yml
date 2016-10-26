@@ -1,0 +1,10 @@
+---
+applications:
+- name: kafka-sample-app
+  memory: 256M
+  instances: 1
+  buildpack: java_buildpack_offline
+  path: target/kafka-sample-app-1.0.0.jar
+  services: [ kafka-service ]
+  env:
+    SPRING_PROFILES_ACTIVE: cloud

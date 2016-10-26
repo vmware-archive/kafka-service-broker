@@ -5,10 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KafkaRepositoryFactory {
 
-    public KafkaRepository create(KafkaServiceInfo info) {
+    public KafkaRepository create(KafkaServiceInfo info) throws InterruptedException {
         log.info("creating kafkaRepository with info: " + info);
-
-        return new KafkaRepository(info);
-
+            return new KafkaRepository(info);
     }
 }

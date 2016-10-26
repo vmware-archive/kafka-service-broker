@@ -17,6 +17,8 @@ public class KafkaServiceInfo implements ServiceInfo {
     private String retriesConfig;
     private String keySerializerClassConfig;
     private String valueSerializerClassConfig;
+    private String topicName;
+
 }
 
 

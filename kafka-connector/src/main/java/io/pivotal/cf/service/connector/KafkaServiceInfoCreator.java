@@ -22,8 +22,9 @@ public class KafkaServiceInfoCreator extends CloudFoundryServiceInfoCreator<Kafk
         String host = credentials.get("hostname").toString();
         String port = credentials.get("port").toString();
         String uri = credentials.get("uri").toString();
+        String topicName = credentials.get("topicName").toString();
 
         return new KafkaServiceInfo(id, host, port, uri, "0", "org.apache.kafka.common.serialization.IntegerSerializer",
-                "org.apache.kafka.common.serialization.StringSerializer");
+                "org.apache.kafka.common.serialization.StringSerializer", topicName);
     }
 }

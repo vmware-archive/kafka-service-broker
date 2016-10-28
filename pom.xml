@@ -13,6 +13,7 @@
         <module>kafka-broker</module>
         <module>kafka-connector</module>
         <module>kafka-sample-app</module>
+        <module>kafka-sample-consumer</module>
     </modules>
 
     <parent>

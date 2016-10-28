@@ -26,7 +26,8 @@ class ConsumerLoop implements Callable {
     private final String groupId;
     private final int id;
 
-    static String KAFKA_NODE = "107.23.42.75:9092";
+    //static String KAFKA_NODE = "107.23.42.75:9092";
+    static String KAFKA_NODE = "54.175.241.13:9092";
 
     public ConsumerLoop(int id,
                         String groupId,

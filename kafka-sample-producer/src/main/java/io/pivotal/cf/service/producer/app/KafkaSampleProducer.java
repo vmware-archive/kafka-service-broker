@@ -10,7 +10,10 @@ import java.util.Properties;
 public class KafkaSampleProducer {
 
 
-    static String KAFKA_NODE = "107.23.42.75:9092";
+    //static String KAFKA_NODE = "107.23.42.75:9092";
+    static String KAFKA_NODE = "54.175.241.13:9092";
+
+
 
     public void produceMessages() throws Exception {
 
@@ -37,7 +40,7 @@ public class KafkaSampleProducer {
             producer.send(new ProducerRecord<>(topicName,
                     "SimpleKey", Integer.toString(i)));
 
-        System.out.println(Integer.toString(numMessages) + " messages sent successfully");
+        System.out.println(Integer.toString(numMessages) + " messages MAY HAVE BEEN successfully....LOOK AT THE CONSUMER");
         producer.flush();
 
     }

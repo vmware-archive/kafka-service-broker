@@ -9,11 +9,7 @@ import java.util.Properties;
 
 public class KafkaSampleProducer {
 
-
-    //static String KAFKA_NODE = "107.23.42.75:9092";
     static String KAFKA_NODE = "54.175.241.13:9092";
-
-
 
     public void produceMessages() throws Exception {
 
@@ -27,7 +23,7 @@ public class KafkaSampleProducer {
         producerProps.put("acks", "all");
         producerProps.put("retries", 0);
         producerProps.put("batch.size", 16384);
-        producerProps.put("linger.ms", 1);
+        producerProps.put("linger.ms", 0);
         producerProps.put("buffer.memory", 33554432);
 
         producerProps.put("key.serializer", StringSerializer.class.getName());
@@ -40,8 +36,10 @@ public class KafkaSampleProducer {
             producer.send(new ProducerRecord<>(topicName,
                     "SimpleKey", Integer.toString(i)));
 
-        System.out.println(Integer.toString(numMessages) + " messages MAY HAVE BEEN successfully....LOOK AT THE CONSUMER");
+        log.info(Integer.toString(numMessages) + " messages MAY HAVE BEEN successfully....LOOK AT THE CONSUMER");
         producer.flush();
+        producer.close();
+
 
     }
 }

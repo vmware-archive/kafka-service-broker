@@ -140,7 +140,7 @@ class KafkaBroker extends DefaultServiceImpl {
      * <a href=https://docs.cloudfoundry.org/services/binding-credentials.html>here.</a>
      * <p>
      * This method is called after the create-binding method: any information stored in binding.properties in the createBinding call
-     * will be availble here, along with any custom data passed in as json parameters as part of the create-binding process by the client.
+     * will be available here, along with any custom data passed in as json parameters as part of the create-binding process by the client.
      *
      * @param instance service instance data passed in by the cloud connector.
      * @param binding  binding data passed in by the cloud connector.
@@ -152,16 +152,21 @@ class KafkaBroker extends DefaultServiceImpl {
             ServiceBrokerException {
         log.info("returning credentials.");
 
-        Map<String, Object> m = new HashMap<>();
-        String[] s = env.getProperty("BOOTSTRAP_SERVERS_CONFIG").split(":");
+        try {
+            Map<String, Object> m = new HashMap<>();
+            String[] s = env.getProperty("BOOTSTRAP_SERVERS_CONFIG").split(":");
 
-        m.put("hostname", s[0]);
-        m.put("port", s[1]);
-        m.put(TOPIC_NAME_KEY, instance.getParameters().get(TOPIC_NAME_KEY));
+            m.put("hostname", s[0]);
+            m.put("port", s[1]);
+            m.put(TOPIC_NAME_KEY, instance.getParameters().get(TOPIC_NAME_KEY));
 
-        String uri = "kafka://" + m.get("hostname") + ":" + m.get("port") + "/" + m.get(TOPIC_NAME_KEY);
-        m.put("uri", uri);
-        return m;
+            String uri = "kafka://" + m.get("hostname") + ":" + m.get("port") + "/" + m.get(TOPIC_NAME_KEY);
+            m.put("uri", uri);
+            return m;
+        } catch (Throwable t) {
+            log.error("error creating credentials.", t);
+            throw new ServiceBrokerException(t);
+        }
     }
 
     @Override

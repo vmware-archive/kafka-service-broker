@@ -1,15 +1,16 @@
 package io.pivotal.cf.servicebroker;
 
 import kafka.admin.TopicCommand;
+import kafka.utils.ZKStringSerializer$;
 import kafka.utils.ZkUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.ZkConnection;
+import org.I0Itec.zkclient.serialize.ZkSerializer;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 import org.springframework.core.env.Environment;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -44,11 +45,14 @@ public class KafkaClient {
     void createTopic(String topicName) {
         ZkUtils zu = null;
 
+
         try {
             ZkConnection con = new ZkConnection(env.getProperty("ZOOKEEPER_HOST"), Integer.parseInt(env.getProperty("ZOOKEEPER_TIMEOUT")));
             ZkClient zc = new ZkClient(con);
+            ZkSerializer zs = ZKStringSerializer$.MODULE$;
+            zc.setZkSerializer(zs);
             zu = new ZkUtils(zc, con, false);
-            TopicCommand.createTopic(zu, new TopicCommand.TopicCommandOptions(new String[]{"--topic", topicName, "--partitions" , "1", "--replication-factor", "1"}));
+            TopicCommand.createTopic(zu, new TopicCommand.TopicCommandOptions(new String[]{"--topic", topicName, "--partitions", "1", "--replication-factor", "1", "--zookeeper", env.getProperty("ZOOKEEPER_HOST")}));
         } finally {
             if (zu != null) {
                 zu.close();

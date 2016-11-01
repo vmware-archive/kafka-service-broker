@@ -68,8 +68,8 @@ public class KafkaBrokerTest {
         Map<String, Object> m = kafkaBroker.getCredentials(serviceInstance, serviceBinding);
         assertNotNull(m);
         assertEquals("ec2-52-207-94-210.compute-1.amazonaws.com", m.get("hostname"));
-        assertEquals("2181", m.get("port"));
-        assertEquals("kafka://ec2-52-207-94-210.compute-1.amazonaws.com:2181/foo", m.get("uri"));
+        assertEquals("9092", m.get("port"));
+        assertEquals("kafka://ec2-52-207-94-210.compute-1.amazonaws.com:9092/foo", m.get("uri"));
         assertEquals("foo", m.get(KafkaBroker.TOPIC_NAME_KEY));
     }
 

@@ -1,67 +1,50 @@
 package io.pivotal.cf.service.connector;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.errors.WakeupException;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.serialization.StringSerializer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Properties;
+import java.util.concurrent.Future;
 
-
+@Slf4j
 public class KafkaRepository {
 
     private KafkaServiceInfo info;
-    private KafkaConsumer<String, String> consumer;
 
 
     public KafkaRepository(KafkaServiceInfo info) throws InterruptedException {
         this.info = info;
-        hostConsumers();
     }
 
-    public KafkaTemplate<Integer, String> template() throws ClassNotFoundException {
-        ProducerFactory<Integer, String> pf =
-                new DefaultKafkaProducerFactory<>(senderProperties());
-        return new KafkaTemplate<>(pf);
+    private Properties senderProperties() throws ClassNotFoundException {
+        Properties producerProps = new Properties();
+        producerProps.put("bootstrap.servers", info.getHost() + ":" + info.getPort());
+
+        producerProps.put("acks", "all");
+        producerProps.put("linger.ms", 0);
+
+        producerProps.put("key.serializer", StringSerializer.class.getName());
+        producerProps.put("value.serializer", StringSerializer.class.getName());
+
+        return producerProps;
+
     }
 
-    private Map<String, Object> senderProperties() throws ClassNotFoundException {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, info.getHost() + ":" + info.getPort());
-        props.put(ProducerConfig.RETRIES_CONFIG, info.getRetriesConfig());
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, Class.forName(info.getKeySerializerClassConfig()));
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Class.forName(info.getValueSerializerClassConfig()));
-        props.put("batch.size", 16384);
-        props.put("linger.ms", 1);
-        props.put("buffer.memory", 33554432);
-        return props;
-    }
-
-    public void sendMessage(String message) throws ClassNotFoundException {
+    public void sendMessage(String message) throws Exception {
 
         Producer<String, String> producer = new KafkaProducer<>(senderProperties());
-        System.out.println("Publishing messages (static key)");
-        producer.send(new ProducerRecord<String, String>(info.getTopicName(), "SimpleKey", message));
-        System.out.println(message + " .....messages sent successfully");
-        producer.flush();
-    }
+        log.info("Publishing messages to topic:  " + info.getTopicName());
+        Future<RecordMetadata> f = producer.send(new ProducerRecord<>(info.getTopicName(), message));
 
-    public void hostConsumers() throws InterruptedException {
-        (new Thread(new KafkaMessageConsumer(this.info))).start();
-        System.out.println("All consumers exited");
+        producer.flush();
+        RecordMetadata m = f.get();
+        log.info("message record: " + m.toString());
+        producer.close();
+
+        log.info(message + " .....message may have been sent successfully");
     }
 }

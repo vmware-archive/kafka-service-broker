@@ -57,10 +57,9 @@ class KafkaBroker extends DefaultServiceImpl {
         }
 
         log.info("creating topic: " + name.toString());
-        try{
+        try {
             client.createTopic(name.toString());
-            //client.sendMessage(name.toString(), "creating topic: " + name);
-        }catch(Throwable throwable){
+        } catch (Throwable throwable) {
             throw new KafkaBrokerException(throwable);
         }
 
@@ -154,14 +153,11 @@ class KafkaBroker extends DefaultServiceImpl {
         log.info("returning credentials.");
 
         Map<String, Object> m = new HashMap<>();
-        String[] s = env.getProperty("ZOOKEEPER_HOST").split(":");
+        String[] s = env.getProperty("BOOTSTRAP_SERVERS_CONFIG").split(":");
+
         m.put("hostname", s[0]);
         m.put("port", s[1]);
         m.put(TOPIC_NAME_KEY, instance.getParameters().get(TOPIC_NAME_KEY));
-//        m.put("username", user.getName());
-//        m.put("password", user.getPassword());
-//
-//        String uri = "hello://" + m.get("username") + ":" + m.get("password") + "@" + m.get("hostname") + ":" + m.get("port");
 
         String uri = "kafka://" + m.get("hostname") + ":" + m.get("port") + "/" + m.get(TOPIC_NAME_KEY);
         m.put("uri", uri);

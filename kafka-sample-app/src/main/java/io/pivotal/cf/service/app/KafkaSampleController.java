@@ -24,7 +24,7 @@ public class KafkaSampleController {
 
     @RequestMapping(value = "/send", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
     ResponseEntity<Void> send(@RequestParam(value = "message") String message) throws Exception {
-        kafkaRepository.sendMessage(message);
+       // kafkaRepository.sendMessage(message);
 
         log.info("sending message: " + message);
         return new ResponseEntity<>(HttpStatus.OK);

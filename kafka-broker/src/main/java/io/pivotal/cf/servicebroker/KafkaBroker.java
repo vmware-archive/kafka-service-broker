@@ -4,7 +4,6 @@ import io.pivotal.cf.servicebroker.model.ServiceBinding;
 import io.pivotal.cf.servicebroker.model.ServiceInstance;
 import io.pivotal.cf.servicebroker.service.DefaultServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.servicebroker.exception.ServiceBrokerException;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -42,27 +41,22 @@ class KafkaBroker extends DefaultServiceImpl {
      *
      * @param instance service instance data passed in by the cloud connector. Clients can pass additional json
      *                 as part of the create-service request, which will show up as key value pairs in instance.parameters.
-     * @throws ServiceBrokerException thrown this for any errors during instance creation.
      */
     @Override
-    public void createInstance(ServiceInstance instance) throws ServiceBrokerException {
+    public void createInstance(ServiceInstance instance) {
 
-        //TODO use  creds to talk to service?
-        //TODO security
-
-        Object name = instance.getParameters().get(TOPIC_NAME_KEY);
-        if (name == null) {
-            name = instance.getId();
-            instance.getParameters().put(TOPIC_NAME_KEY, name);
-        }
-
-        log.info("creating topic: " + name.toString());
         try {
+            Object name = instance.getParameters().get(TOPIC_NAME_KEY);
+            if (name == null) {
+                name = instance.getId();
+                instance.getParameters().put(TOPIC_NAME_KEY, name);
+            }
+
+            log.info("creating topic: " + name.toString());
             client.createTopic(name.toString());
         } catch (Throwable throwable) {
             throw new KafkaBrokerException(throwable);
         }
-
     }
 
     /**
@@ -70,16 +64,17 @@ class KafkaBroker extends DefaultServiceImpl {
      * on your underlying service, delete user accounts, destroy environments, etc.
      *
      * @param instance service instance data passed in by the cloud connector.
-     * @throws ServiceBrokerException thrown this for any errors during instance deletion.
      */
     @Override
-    public void deleteInstance(ServiceInstance instance) throws ServiceBrokerException {
-        //TODO use admin creds to talk to service
+    public void deleteInstance(ServiceInstance instance) {
+        try {
+            log.info("de-provisioning service instance which is a kafka topic: " + instance.getId());
 
-        log.info("deprovisioning broker user: " + instance.getId());
-
-        //call out to kafka to delete the topic
-        client.deleteTopic(instance.getParameters().get(TOPIC_NAME_KEY).toString());
+            //call out to kafka to delete the topic
+            client.deleteTopic(instance.getParameters().get(TOPIC_NAME_KEY).toString());
+        } catch (Throwable throwable) {
+            throw new KafkaBrokerException(throwable);
+        }
     }
 
     /**
@@ -87,16 +82,10 @@ class KafkaBroker extends DefaultServiceImpl {
      * your service instance.
      *
      * @param instance service instance data passed in by the cloud connector.
-     * @throws ServiceBrokerException thrown this for any errors during instance deletion. Services that do not support
-     *                                updating can through ServiceInstanceUpdateNotSupportedException here.
      */
     @Override
-    public void updateInstance(ServiceInstance instance) throws ServiceBrokerException {
-        //TODO change user/pw for this instance, use admin creds to talk to service
+    public void updateInstance(ServiceInstance instance) {
         log.info("updating broker user: " + instance.getId());
-
-        //future: re-config topics, security settings?
-
     }
 
     /**
@@ -111,11 +100,9 @@ class KafkaBroker extends DefaultServiceImpl {
      *                 as part of the bind-service request, which will show up as key value pairs in binding.parameters. Brokers
      *                 can, as part of this method, store any information needed for credentials and unbinding operations as key/value
      *                 pairs in binding.properties
-     * @throws ServiceBrokerException thrown this for any errors during binding creation.
      */
     @Override
-    public void createBinding(ServiceInstance instance, ServiceBinding binding) throws ServiceBrokerException {
-        //TODO use admin creds to talk to service
+    public void createBinding(ServiceInstance instance, ServiceBinding binding) {
         // use app guid to send bind request
         //don't need to talk to kafka, just return credentials.
         log.info("binding app: " + binding.getAppGuid() + " to topic: " + instance.getParameters().get(TOPIC_NAME_KEY));
@@ -126,11 +113,9 @@ class KafkaBroker extends DefaultServiceImpl {
      *
      * @param instance service instance data passed in by the cloud connector.
      * @param binding  binding data passed in by the cloud connector.
-     * @throws ServiceBrokerException thrown this for any errors during the unbinding creation.
      */
     @Override
-    public void deleteBinding(ServiceInstance instance, ServiceBinding binding) throws ServiceBrokerException {
-        //TODO use admin creds to talk to service
+    public void deleteBinding(ServiceInstance instance, ServiceBinding binding) {
         log.info("unbinding app: " + binding.getAppGuid() + " from topic: " + instance.getParameters().get(TOPIC_NAME_KEY));
     }
 
@@ -145,11 +130,9 @@ class KafkaBroker extends DefaultServiceImpl {
      * @param instance service instance data passed in by the cloud connector.
      * @param binding  binding data passed in by the cloud connector.
      * @return credentials, as a series of key/value pairs
-     * @throws ServiceBrokerException thrown this for any errors during credential creation.
      */
     @Override
-    public Map<String, Object> getCredentials(ServiceInstance instance, ServiceBinding binding) throws
-            ServiceBrokerException {
+    public Map<String, Object> getCredentials(ServiceInstance instance, ServiceBinding binding) {
         log.info("returning credentials.");
 
         try {
@@ -164,14 +147,12 @@ class KafkaBroker extends DefaultServiceImpl {
             m.put("uri", uri);
             return m;
         } catch (Throwable t) {
-            log.error("error creating credentials.", t);
-            throw new ServiceBrokerException(t);
+            throw new KafkaBrokerException(t);
         }
     }
 
     @Override
     public boolean isAsync() {
-        //TODO deal with async
         return false;
     }
 }

@@ -18,7 +18,7 @@
       "plans":[
         {
           "id":"kafkaManyToMany",
-          "name":"ManyToMany",
+          "name":"PubSub",
           "description":"Many pubs, Many subs",
           "metadata": {
             "cost": 0,

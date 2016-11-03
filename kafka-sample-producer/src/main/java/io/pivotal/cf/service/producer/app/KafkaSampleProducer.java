@@ -16,8 +16,12 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class KafkaSampleProducer implements ApplicationListener<ContextRefreshedEvent> {
 
-    @Autowired
     private KafkaRepository repo;
+
+    public KafkaSampleProducer(KafkaRepository repo) {
+        this.repo = repo;
+    }
+
 
     private void produceMessages() throws ExecutionException, InterruptedException {
 

@@ -19,8 +19,11 @@ import java.util.concurrent.ExecutionException;
 @Component
 public class KafkaSampleConsumer implements ApplicationListener<ContextRefreshedEvent> {
 
-    @Autowired
     private KafkaRepository repo;
+
+    public KafkaSampleConsumer(KafkaRepository repo) {
+        this.repo = repo;
+    }
 
     private void consumeMessages() throws ExecutionException, InterruptedException {
         KafkaMessageListenerContainer<Integer, String> container = repo.getConsumer(new ConsumerListener());
@@ -49,6 +52,5 @@ class ConsumerListener implements AcknowledgingMessageListener<Integer, String>,
     @Override
     public void onMessage(ConsumerRecord<Integer, String> data, Acknowledgment acknowledgment) {
         log.info("received: " + data);
-        //acknowledgment.acknowledge();
     }
 }

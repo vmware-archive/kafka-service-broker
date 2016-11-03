@@ -79,7 +79,7 @@ public class KafkaClient {
     }
 
     private ZooKeeper zooKeeper() throws IOException {
-        return new ZooKeeper(env.getProperty("ZOOKEEPER_HOST"), Integer.parseInt(env.getProperty("ZOOKEEPER_TIMEOUT")), new Watcher() {
+        return new ZooKeeper(env.getProperty("ZOOKEEPER_HOST"), Integer.parseInt(env.getProperty("ZOOKEEPER_TIMEOUT")), new Watcher(){
             @Override
             public void process(WatchedEvent event) {
                 log.info("watching: " + event.toString());

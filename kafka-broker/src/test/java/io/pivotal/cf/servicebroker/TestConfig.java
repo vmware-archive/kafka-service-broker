@@ -3,6 +3,7 @@ package io.pivotal.cf.servicebroker;
 import io.pivotal.cf.servicebroker.model.ServiceBinding;
 import io.pivotal.cf.servicebroker.model.ServiceInstance;
 import lombok.extern.slf4j.Slf4j;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.servicebroker.model.CreateServiceInstanceBindingRequest;
@@ -39,7 +40,8 @@ class TestConfig {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-
+    @MockBean
+    KafkaClient client;
 
     @MockBean
     private RedisTemplate<String, ServiceInstance> instanceTemplate;

@@ -4,23 +4,23 @@ This is a Cloud Foundry service broker for [apache kafka](https://kafka.apache.o
 ##Where to get the tile
 The tile will be available on [pivnet](https://network.pivotal.io/) in the near future (Fall, 2016). In the meanwhile, if you are interested in using the broker you can build and deploy it manually following the directions below.
 
-##Building the project
-The broker is based on the [simple-service-broker](https://github.com/cf-platform-eng/simple-service-broker). Follow the instruction in the [README](https://github.com/cf-platform-eng/simple-service-broker/blob/master/simple-broker/README.md) of that project to check-out, mvn build and install this library.
+##Prerequisites
+The broker is based on the [simple-service-broker](https://github.com/cf-platform-eng/simple-service-broker). Follow the instruction in the [README](https://github.com/cf-platform-eng/simple-service-broker/blob/master/simple-broker/README.md) of that project to check-out, mvn build and install the library.
 
 ##The Modules
 The kafka broker project includes the folowing modules. See their respective READMEs for more information.
 
 ###[kafka-broker](https://github.com/cf-platform-eng/kafka-service-broker/tree/master/kafka-broker)
-This module contains the broker code.
+* This module contains the broker code.
 
 ###[kafka-connector](https://github.com/cf-platform-eng/kafka-service-broker/tree/master/kafka-connector)
-This module contains spring-cloud-connector code that can optionally be used by consumers of the brokered service, to make it easier to connect to the kafka back-end services.
+* This module contains spring-cloud-connector code that can optionally be used by consumers of the brokered service, to make it easier to connect to the kafka back-end services.
 
 ###[kafka-sample-consumer](https://github.com/cf-platform-eng/kafka-service-broker/tree/master/kafka-sample-consumer)
-A sample project that can be used to demo message consumption, and illustrates the use of the broker-connector.
+* A sample project that can be used to demo message consumption, and illustrates the use of the broker-connector.
  
 ###[kafka-sample-producer](https://github.com/cf-platform-eng/kafka-service-broker/tree/master/kafka-sample-producer)
-A sample project that can be used to demo message production, and illustrates the use of the broker-connector.
+* A sample project that can be used to demo message production, and illustrates the use of the broker-connector.
 
 ##Instructions to run the demo
 1. check out and build the project

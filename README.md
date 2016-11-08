@@ -1,6 +1,8 @@
 #kafka-service-broker
 This is a Cloud Foundry service broker for [apache kafka](https://kafka.apache.org/documentation). It supports the dynamic creation and deletion of topics, tied to the creation and deletion of Cloud Foundry service instances. Applications can then bind to these service instances to take part in Pub/Sub message exchanges.
 
+This version should be considered a beta product, has been tested against a single zookeeper and a single kafka node. Further testing is currently a work-in-progress.
+
 ##Where to get the tile
 The tile will be available on [pivnet](https://network.pivotal.io/) in the near future (Fall, 2016). In the meanwhile, if you are interested in using the broker you can build and deploy it manually following the directions below.
 

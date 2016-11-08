@@ -10,8 +10,8 @@ The [simple-service-broker](https://github.com/cf-platform-eng/simple-service-br
   ```bash
   cf create-service p-redis shared-vm redis-for-kafka
   ```
-2. The broker makes use of spring-security to protect itself against unauthorized meddling. To set its password edit the [application.properties file](https://github.com/cf-platform-eng/confluent-kafka-broker/blob/master/kafka-broker/src/main/resources/application.properties) (you probably don't want to check this in!)
-1. Edit the [manifest.yml](https://github.com/cf-platform-eng/confluent-kafka-broker/blob/master/kafka-broker/manifest.yml) file as needed for your CF install.
+2. The broker makes use of spring-security to protect itself against unauthorized meddling. To set its password edit the [application.properties file](https://github.com/cf-platform-eng/kafka-service-broker/blob/master/kafka-broker/src/main/resources/application.properties) (you probably don't want to check this in!)
+1. Edit the [manifest.yml](https://github.com/cf-platform-eng/kafka-service-broker/blob/master/kafka-broker/manifest.yml) file as needed for your CF install.
 1. Build the broker:
   
   ```bash

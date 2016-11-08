@@ -23,15 +23,16 @@ A sample project that can be used to demo message consumption, and illustrates t
 A sample project that can be used to demo message production, and illustrates the use of the broker-connector.
 
 ##Instructions to run the demo
-1.
+1. check out and build the project
+
   ```bash
   git clone git@github.com:cf-platform-eng/kafka-service-broker.git
   cd kafka-service-broker
   mvn clean install  
   ```
 2. Follow the instructions in the [kafka-broker](https://github.com/cf-platform-eng/kafka-service-broker/tree/master/kafka-broker) to push and register the broker.
-3. Create the kafka service and make sure the _name of the service_ matches the names in the manifest.yml files _exactly_ in the producer and consumer apps.
-   If it does not, make sure to change the name in the manifest.yml. 
+3. Create the kafka service and make sure the _name of the service_ matches the names in the manifest.yml files _exactly_ in the producer and consumer apps. If it does not, make sure to change the name in the manifest.yml. 
+
   ```bash  
   cf create-service KafkaService PubSub kafka-service   
   ```  

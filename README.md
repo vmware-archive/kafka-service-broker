@@ -1,23 +1,23 @@
-#sample-connector
-This is a sample spring cloud spring service connector that can be used to simplify service access for consumers of the sample-service, as brokered by the sample-broker. For general information about service connectors, please refer to [this documentation.](http://cloud.spring.io/spring-cloud-connectors/spring-cloud-spring-service-connector.html)
+#confluent-kafka-broker
+This is a Cloud Foundry service broker for [apache kafka](https://kafka.apache.org/documentation). It supports the dynamic creation and deletion of topics, tied to the creation and deletion of Cloud Foundry service instances. Applications can then bind to these service instances to take part in Pub/Sub message exchanges.
 
-##Adapting the connector
-To adapt the connector for use with your service, rename and modify the following classes as appropriate, and then include the connector project as a dependency to the client project.
+##Where to get the tile
+The tile will be available on [pivnet](https://network.pivotal.io/) in the near future (Fall, 2016). In the meanwhile, if you are interested in using the broker you can build and deploy it manually following the directions below.
 
-###[HelloConnectionCreator](https://github.com/cf-platform-eng/simple-service-broker/blob/master/sample-connector/src/main/java/io/pivotal/cf/service/connector/HelloConnectionCreator.java)
-This class is responsible for calling the HelloRepositoryFactory class, and returning a repository object. Clients will use this repository to communicate with your backend service.
+##Building the project
+The broker is based on the [simple-service-broker](https://github.com/cf-platform-eng/simple-service-broker). Follow the instruction in the [README](https://github.com/cf-platform-eng/simple-service-broker/blob/master/simple-broker/README.md) of that project to check-out, mvn build and install this library.
 
-###[HelloRepository](https://github.com/cf-platform-eng/simple-service-broker/blob/master/sample-connector/src/main/java/io/pivotal/cf/service/connector/HelloRepository.java)
-The go-to for interacting with the back-end service. In our case this is a [feign](https://github.com/OpenFeign/feign) repository that speaks to rest API endpoints exposed by the HelloService.
+##The Modules
+The kafka broker project includes the folowing modules. See their respective READMEs for more information.
 
-###[HelloRepositoryFactory](https://github.com/cf-platform-eng/simple-service-broker/blob/master/sample-connector/src/main/java/io/pivotal/cf/service/connector/HelloRepositoryFactory.java)
-Creates a repository using the data pulled out of HelloServiceInfo.
+###[kafka-broker](https://github.com/cf-platform-eng/confluent-kafka-broker/tree/master/kafka-broker)
+This module contains the broker code.
+
+###[kafka-connector](https://github.com/cf-platform-eng/confluent-kafka-broker/tree/master/kafka-connector)
+This module contains spring-cloud-connector code that can optionally be used by consumers of the brokered service, to make it easier to connect to the kafka back-end services.
+
+###[kafka-sample-consumer](https://github.com/cf-platform-eng/confluent-kafka-broker/tree/master/kafka-sample-consumer)
+A sample project that can be used to demo message consumption, and illustrates the use of the broker-connector.
  
-###[HelloServiceInfo](https://github.com/cf-platform-eng/simple-service-broker/blob/master/sample-connector/src/main/java/io/pivotal/cf/service/connector/HelloServiceInfo.java)
-Value-holder that contains whatever is needed to connect to the backend service. On Cloud Foundry this data comes from VCAP_SERVICES environment variables, which are loaded from data provided in the broker's [getCredentials()](https://github.com/cf-platform-eng/simple-service-broker/blob/master/sample-broker/src/main/java/io/pivotal/cf/servicebroker/HelloBroker.java#L179-L200) method. The spring connector framework does the work of parsing these out for you and creating a populated instance of this class during your client's startup.
-
-###[HelloServiceInfoCreator](https://github.com/cf-platform-eng/simple-service-broker/blob/master/sample-connector/src/main/java/io/pivotal/cf/service/connector/HelloServiceInfoCreator.java)
-Translates the raw data from VCAP_SERVICES into a HelloServiceInfo instance.
-
-###[resources/META-INF/services](https://github.com/cf-platform-eng/simple-service-broker/tree/master/sample-connector/src/main/resources/META-INF/services)
-You will need to edit these files to add your specific class names (they are needed by the connector framework).
+###[kafka-sample-producer](https://github.com/cf-platform-eng/confluent-kafka-broker/tree/master/kafka-sample-producer)
+A sample project that can be used to demo message production, and illustrates the use of the broker-connector.

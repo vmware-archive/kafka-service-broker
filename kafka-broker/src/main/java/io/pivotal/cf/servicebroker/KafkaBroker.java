@@ -137,13 +137,10 @@ class KafkaBroker extends DefaultServiceImpl {
 
         try {
             Map<String, Object> m = new HashMap<>();
-            String[] s = env.getProperty("BOOTSTRAP_SERVERS_CONFIG").split(":");
-
-            m.put("hostname", s[0]);
-            m.put("port", s[1]);
+            m.put("hostname", env.getProperty("BOOTSTRAP_SERVERS_CONFIG"));
             m.put(TOPIC_NAME_KEY, instance.getParameters().get(TOPIC_NAME_KEY));
 
-            String uri = "kafka://" + m.get("hostname") + ":" + m.get("port") + "/" + m.get(TOPIC_NAME_KEY);
+            String uri = "kafka://" + m.get("hostname") + "/" + m.get(TOPIC_NAME_KEY);
             m.put("uri", uri);
             return m;
         } catch (Throwable t) {

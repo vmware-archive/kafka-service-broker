@@ -32,8 +32,8 @@ public class KafkaClientTest {
         List<String> listOfTopics = new ArrayList<>();
         listOfTopics.add("foo");
 
-        given(this.client.listTopics())
-                .willReturn(listOfTopics);
+//        given(this.client.listTopics())
+//                .willReturn(listOfTopics);
 
         List<String> s = client.listTopics();
         assertNotNull(s);
@@ -50,17 +50,24 @@ public class KafkaClientTest {
         client.createTopic(topicName);
         TimeUnit.SECONDS.sleep(3);
 
-        List<String> listOfTopics = new ArrayList<>();
-        listOfTopics.add(topicName);
+//        List<String> listOfTopics = new ArrayList<>();
+//        listOfTopics.add(topicName);
 
-        given(this.client.listTopics()).willReturn(listOfTopics);
+//        given(this.client.listTopics()).willReturn(listOfTopics);
 
         assertTrue(client.listTopics().contains(topicName));
 
         client.deleteTopic(topicName);
         TimeUnit.SECONDS.sleep(3);
-        listOfTopics.remove(topicName);
+//        listOfTopics.remove(topicName);
 
         assertFalse(client.listTopics().contains(topicName));
+    }
+
+    @Test
+    public void testGetBootstraps() throws Exception {
+        List<String> s = client.getBootstrapServers();
+        assertNotNull(s);
+        assertTrue(s.size() > 0);
     }
 }

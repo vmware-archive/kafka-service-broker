@@ -40,8 +40,8 @@ class TestConfig {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @MockBean
-    KafkaClient client;
+//    @MockBean
+//    KafkaClient client;
 
     @MockBean
     private RedisTemplate<String, ServiceInstance> instanceTemplate;

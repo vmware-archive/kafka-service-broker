@@ -10,11 +10,14 @@ import org.I0Itec.zkclient.serialize.ZkSerializer;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
+import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -85,5 +88,24 @@ public class KafkaClient {
                 log.info("watching: " + event.toString());
             }
         });
+    }
+
+    public List<String> getBootstrapServers() throws Exception {
+        List<String> ret = new ArrayList<>();
+        ZooKeeper zk = zooKeeper();
+
+        List<String> ids = zk.getChildren("/brokers/ids", false);
+        for (String id : ids) {
+            String brokerInfo = new String(zk.getData("/brokers/ids/" + id, false, null));
+            Map m = toMap(brokerInfo);
+            ret.add(m.get("host") + ":" + m.get("port"));
+        }
+
+        return ret;
+    }
+
+    private Map toMap(String json) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(json, Map.class);
     }
 }

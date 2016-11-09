@@ -23,7 +23,6 @@ import java.util.Map;
 @Slf4j
 public class KafkaClient {
 
-
     private Environment env;
 
     public KafkaClient(Environment env) {
@@ -47,7 +46,6 @@ public class KafkaClient {
 
     void createTopic(String topicName) {
         ZkUtils zu = null;
-
 
         try {
             ZkConnection con = new ZkConnection(env.getProperty("ZOOKEEPER_HOST"), Integer.parseInt(env.getProperty("ZOOKEEPER_TIMEOUT")));
@@ -88,24 +86,5 @@ public class KafkaClient {
                 log.info("watching: " + event.toString());
             }
         });
-    }
-
-    public List<String> getBootstrapServers() throws Exception {
-        List<String> ret = new ArrayList<>();
-        ZooKeeper zk = zooKeeper();
-
-        List<String> ids = zk.getChildren("/brokers/ids", false);
-        for (String id : ids) {
-            String brokerInfo = new String(zk.getData("/brokers/ids/" + id, false, null));
-            Map m = toMap(brokerInfo);
-            ret.add(m.get("host") + ":" + m.get("port"));
-        }
-
-        return ret;
-    }
-
-    private Map toMap(String json) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(json, Map.class);
     }
 }

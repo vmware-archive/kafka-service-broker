@@ -11,6 +11,7 @@
 
     <modules>
         <module>kafka-broker</module>
+        <module>kafka-util</module>
         <module>kafka-connector</module>
         <module>kafka-sample-producer</module>
         <module>kafka-sample-consumer</module>

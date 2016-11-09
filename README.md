@@ -7,6 +7,8 @@ This version should be considered a beta product, has been tested against a sing
 The tile will be available on [pivnet](https://network.pivotal.io/) in the near future (Fall, 2016). In the meanwhile, if you are interested in using the broker you can build and deploy it manually following the directions below.
 
 ##Prerequisites
+
+This is a service broker implementation and requires a zookeeper and a kafka instance. This is a pre-cursor to a bosh-release and currently has been tested with a single kafka node and a single zookeeper node.
 The broker is based on the [simple-service-broker](https://github.com/cf-platform-eng/simple-service-broker). Follow the instruction in the [README](https://github.com/cf-platform-eng/simple-service-broker/blob/master/simple-broker/README.md) of that project to check-out, mvn build and install the library.
 
 ##The Modules

@@ -25,9 +25,12 @@ public class KafkaClientTest {
     @Autowired
     private KafkaClient client;
 
+    @Autowired
+    private Util util;
+
 
     @Test
-    public void testListTopics() {
+    public void testListTopics() throws Exception {
 
         List<String> listOfTopics = new ArrayList<>();
         listOfTopics.add("foo");
@@ -41,7 +44,7 @@ public class KafkaClientTest {
     }
 
     @Test
-    public void testCreateAndDeleteTopic() throws InterruptedException {
+    public void testCreateAndDeleteTopic() throws Exception {
 
 
         String topicName = "topic" + System.currentTimeMillis();
@@ -66,7 +69,7 @@ public class KafkaClientTest {
 
     @Test
     public void testGetBootstraps() throws Exception {
-        List<String> s = client.getBootstrapServers();
+        List<String> s = util.getBootstrapServers();
         assertNotNull(s);
         assertTrue(s.size() > 0);
     }

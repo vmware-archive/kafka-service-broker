@@ -19,29 +19,29 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class Util {
+class Util {
 
     private Environment env;
 
-    public Util(Environment env) {
+    Util(Environment env) {
         this.env = env;
     }
 
-    public ZkConnection getConnection() {
+    ZkConnection getConnection() {
         return new ZkConnection(env.getProperty("ZOOKEEPER_HOST"), Integer.parseInt(env.getProperty("ZOOKEEPER_TIMEOUT")));
     }
 
-    public ZkClient getClient() {
+    ZkClient getClient() {
         ZkClient zc = new ZkClient(getConnection());
         zc.setZkSerializer(ZKStringSerializer$.MODULE$);
         return zc;
     }
 
-    public ZkUtils getUtils() {
+    ZkUtils getUtils() {
         return new ZkUtils(getClient(), getConnection(), false);
     }
 
-    public ZooKeeper getZooKeeper() throws IOException {
+    ZooKeeper getZooKeeper() throws IOException {
         return new ZooKeeper(env.getProperty("ZOOKEEPER_HOST"), Integer.parseInt(env.getProperty("ZOOKEEPER_TIMEOUT")), new Watcher() {
             @Override
             public void process(WatchedEvent event) {
@@ -50,7 +50,7 @@ public class Util {
         });
     }
 
-    public List<String> getBootstrapServers() throws Exception {
+    List<String> getBootstrapServers() throws Exception {
         List<String> ret = new ArrayList<>();
         ZooKeeper zk = getZooKeeper();
 

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.ZooKeeper;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import scala.util.parsing.combinator.testing.Str;
 
 import java.util.List;
 
@@ -64,4 +65,13 @@ public class KafkaClient {
             }
         }
     }
+
+   String getBootstrapServers() throws Exception {
+
+       String bootstrap_servers = util.getBootstrapServers().toString().replaceAll("\\s","");
+       bootstrap_servers = bootstrap_servers.substring(1,bootstrap_servers.length()-1);
+       return bootstrap_servers;
+    }
+
+
 }

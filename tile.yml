@@ -2,10 +2,10 @@
 # The high-level description of your tile.
 # Replace these properties with real values.
 #
-name: kafka-broker # By convention lowercase with dashes
-icon_file: resources/kafka.png
-label: Kafka
-description: A kafka broker.
+name: confluent-kafka-broker # By convention lowercase with dashes
+icon_file: resources/icon.png
+label: Brief Text for the Tile Icon
+description: Longer description of the tile's purpose
 
 # Global defaults (all optional)
 #
@@ -22,12 +22,10 @@ apply_open_security_group: true         # Apply open security group, default: fa
 # https://github.com/cf-platform-eng/tile-generator/blob/master/README.md
 #
 packages:
-- name: kafka-broker
-  type: app-broker
-  enable_global_access_to_plans: true
+- name: my-application
+  type: app
   manifest:
-    path: target/kafka-broker-1.0.0.jar
-  auto_services: p-redis
+    path: resources/my-application-1.0.0.jar
 #   command: python app.py
 #   memory: 256M
 
@@ -56,33 +54,23 @@ packages:
 # applications as environment variables. You can also refer to them
 # elsewhere in this template by using:
 #     (( .properties.<property-name> ))
-#
-forms:
-- name: kafka_properties
-  label: Kafka
-  description: Kafka Broker properties
-  properties:
-  - name: api_version
-    type: string
-    default: '2.9'
-    label: Broker API Version
-    description: Which service broker api this broker supports
-  - name: zookeeper_host
-    type: string
-    default: 'localhost:2181'
-    label: zookeeper-host
-    description: Zookeeper host and port for the Kafka cluster
-  - name: zookeeper_timeout
-    type: integer
-    default: 10000
-    label: zookeeper-timeout
-    description: Zookeeper Timeout in ms
+# 
+# forms:
+# - name: buildpack_properties
+#   label: Buildpack
+#   description: Buildpack_properties
+#   properties:
+#   - name: buildpack_rank
+#     type: integer
+#     default: 0
+#     label: Buildpack rank for this buildpack_rank
+#     description: Ranking of this buildpack relative to others
 
 # Add any dependencies your tile has on other installed products.
 # This is often appropriate when using automatic service provisioning
 # for any of your packages above, with services provided by other
 # products.
 #
-requires_product_versions:
-- name: p-redis
-  version: '~> 1.5'
+# requires_product_versions:
+# - name: p-mysql
+#   version: '~> 1.7'

@@ -52,7 +52,7 @@ public class JointProducerConsumer {
 
         // Assemble properties
         Properties producerProps = new Properties();
-        producerProps.put("bootstrap.servers", env.getProperty("BOOTSTRAP_SERVERS_CONFIG"));
+        producerProps.put("bootstrap.servers",client.getBootstrapServers());
         producerProps.put("acks", "0");
         producerProps.put("linger.ms", 0);
 

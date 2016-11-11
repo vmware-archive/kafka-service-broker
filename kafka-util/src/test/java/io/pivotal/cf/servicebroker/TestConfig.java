@@ -25,4 +25,9 @@ class TestConfig {
     public Util util(Environment env) {
         return new Util(env);
     }
+
+    @Bean
+    public KafkaClient client(Util util, Environment env) {
+        return new KafkaClient(util, env);
+    }
 }

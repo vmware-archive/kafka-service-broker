@@ -1,5 +1,6 @@
 package io.pivotal.cf.servicebroker;
 
+import kafka.utils.ZKStringSerializer$;
 import kafka.utils.ZkUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.I0Itec.zkclient.ZkClient;
@@ -31,7 +32,9 @@ public class Util {
     }
 
     public ZkClient getClient() {
-        return  new ZkClient(getConnection());
+        ZkClient zc = new ZkClient(getConnection());
+        zc.setZkSerializer(ZKStringSerializer$.MODULE$);
+        return zc;
     }
 
     public ZkUtils getUtils() {
@@ -39,7 +42,7 @@ public class Util {
     }
 
     public ZooKeeper getZooKeeper() throws IOException {
-        return new ZooKeeper(env.getProperty("ZOOKEEPER_HOST"), Integer.parseInt(env.getProperty("ZOOKEEPER_TIMEOUT")), new Watcher(){
+        return new ZooKeeper(env.getProperty("ZOOKEEPER_HOST"), Integer.parseInt(env.getProperty("ZOOKEEPER_TIMEOUT")), new Watcher() {
             @Override
             public void process(WatchedEvent event) {
                 log.info("watching: " + event.toString());

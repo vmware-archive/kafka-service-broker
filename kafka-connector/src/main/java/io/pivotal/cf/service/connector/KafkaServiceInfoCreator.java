@@ -36,7 +36,7 @@ public class KafkaServiceInfoCreator extends CloudFoundryServiceInfoCreator<Kafk
 
         Map<String, Object> credentials = getCredentials(serviceData);
         String id = getId(serviceData);
-        String hosts = credentials.get("hosts").toString();
+        String hosts = credentials.get("hostname").toString();
         String uri = credentials.get("uri").toString();
         String topicName = credentials.get("topicName").toString();
 

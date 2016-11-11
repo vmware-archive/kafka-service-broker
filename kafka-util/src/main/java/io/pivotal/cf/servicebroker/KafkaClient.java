@@ -38,7 +38,6 @@ public class KafkaClient {
 
         try {
             zu = util.getUtils();
-            zu.
             TopicCommand.createTopic(zu, new TopicCommand.TopicCommandOptions(new String[]{"--topic", topicName, "--partitions", "1", "--replication-factor", "1", "--zookeeper", env.getProperty("ZOOKEEPER_HOST")}));
         } finally {
             if (zu != null) {
@@ -47,13 +46,14 @@ public class KafkaClient {
         }
     }
 
-    List<String> listTopics() {
+    List<String> listTopics() throws Exception {
         ZooKeeper z = null;
         try {
             z = util.getZooKeeper();
             return z.getChildren("/brokers/topics", false);
         } catch (Exception e) {
-            throw new KafkaBrokerException(e.getMessage(), e);
+            log.error(e.getMessage());
+            throw e;
         } finally {
             if (z != null) {
                 try {

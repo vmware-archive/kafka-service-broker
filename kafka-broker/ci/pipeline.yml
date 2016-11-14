@@ -1,0 +1,82 @@
+groups:
+- name: all
+  jobs:
+  - build-broker
+  - build-tile
+resources:
+
+- name: version
+  type: semver
+  source:
+    bucket: {{bucket-name}}
+    key: current-version
+    access_key_id: {{aws-key-id}}
+    secret_access_key: {{aws-key}}
+    initial_version: 1.0.0
+
+- name: tile-repo
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cf-platform-eng/kafka-service-broker
+
+- name: simple-broker
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/cf-platform-eng/simple-service-broker
+
+- name: broker-tile
+  type: s3
+  source:
+    access_key_id: {{aws-key-id}}
+    bucket: {{bucket-name}}
+    regexp: .*-(?P<version>.*)\.pivotal
+    secret_access_key: {{aws-key}}
+
+- name: broker-jar
+  type: s3
+  source:
+    access_key_id: {{aws-key-id}}
+    bucket: {{bucket-name}}
+    regexp: .*-(?P<version>.*)\.jar
+    secret_access_key: {{aws-key}}
+
+- name: tile-history
+  type: s3
+  source:
+    access_key_id: {{aws-key-id}}
+    bucket: {{bucket-name}}
+    regexp: tile\-history-(?P<version>.*)\.yml
+    secret_access_key: {{aws-key}}
+
+jobs:
+- name: build-broker
+  serial_groups: [version]
+  plan:
+  - get: tile-repo
+    trigger: true
+  - get: version
+    params: {bump: patch}
+  - task: build-broker
+    file: tile-repo/kafka-broker/ci/build-broker/task.yml
+  - put: broker-jar
+    params: {file: broker-jar/*.jar}
+  - put: version
+    params: {file: version/number}
+
+- name: build-tile
+  serial_groups: [version]
+  plan:
+  - aggregate:
+    - get: tile-repo
+    - get: broker-jar
+      trigger: true
+      passed:
+        - build-broker
+    - get: version
+  - task: build-tile
+    file: tile-repo/sample-broker/ci/build-tile/task.yml
+  - put: broker-tile
+    params:
+      file: broker-tile/*.pivotal

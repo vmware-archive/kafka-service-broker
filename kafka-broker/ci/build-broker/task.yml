@@ -1,0 +1,15 @@
+---
+platform: linux
+
+image: docker:///maven#3-jdk-8-onbuild
+
+inputs:
+- name: tile-repo
+- name: simple-broker
+- name: version
+
+outputs:
+- name: broker-jar
+
+run:
+  path: tile-repo/kafka-broker/ci/build-broker/task.sh

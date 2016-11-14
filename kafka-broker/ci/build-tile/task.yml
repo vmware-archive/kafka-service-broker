@@ -1,0 +1,15 @@
+---
+platform: linux
+
+image: docker:///cfplatformeng/tile-inator
+
+inputs:
+- name: tile-repo
+- name: broker-jar
+- name: version
+
+outputs:
+- name: broker-tile
+
+run:
+  path: tile-repo/kafka-broker/ci/build-tile/task.sh

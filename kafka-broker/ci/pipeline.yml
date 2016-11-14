@@ -54,6 +54,7 @@ jobs:
 - name: build-broker
   serial_groups: [version]
   plan:
+  - get: simple-broker
   - get: tile-repo
     trigger: true
   - get: version
@@ -76,7 +77,7 @@ jobs:
         - build-broker
     - get: version
   - task: build-tile
-    file: tile-repo/sample-broker/ci/build-tile/task.yml
+    file: tile-repo/kafka-broker/ci/build-tile/task.yml
   - put: broker-tile
     params:
       file: broker-tile/*.pivotal

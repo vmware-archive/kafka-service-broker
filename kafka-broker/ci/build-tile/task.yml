@@ -1,7 +1,7 @@
 ---
 platform: linux
 
-image: docker:///cfplatformeng/tile-inator
+image: docker:///cfplatformeng/tile-generator
 
 inputs:
 - name: tile-repo

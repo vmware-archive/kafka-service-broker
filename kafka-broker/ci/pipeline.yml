@@ -48,7 +48,7 @@ resources:
   source:
     access_key_id: {{aws-key-id}}
     bucket: {{bucket-name}}
-    regexp: tile\-history-(?P<version>.*)\.yml
+    regexp: tile\-history.yml
     secret_access_key: {{aws-key}}
 
 jobs:

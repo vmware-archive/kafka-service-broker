@@ -81,8 +81,7 @@ jobs:
   - task: build-tile
     file: tile-repo/kafka-broker/ci/build-tile/task.yml
   - put: tile-history
-    params:
-      file: tile-history-new/*.yml
+    params: {file: tile-history-new/*.yml}
   - put: broker-tile
     params:
       file: broker-tile/*.pivotal

@@ -48,7 +48,7 @@ resources:
   source:
     access_key_id: {{aws-key-id}}
     bucket: {{bucket-name}}
-    versioned_file: tile-history.yml
+    regexp: tile-history-(?P<version>.*)\.yml
     secret_access_key: {{aws-key}}
 
 jobs:
@@ -82,7 +82,7 @@ jobs:
     file: tile-repo/kafka-broker/ci/build-tile/task.yml
   - put: tile-history
     params:
-      file: tile-history-new/tile-history.yml
+      file: tile-history-new/*.yml
   - put: broker-tile
     params:
       file: broker-tile/*.pivotal

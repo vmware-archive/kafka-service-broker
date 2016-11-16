@@ -12,3 +12,4 @@ filename="${filename%-*}"
 ver=`more ../../version/number`
 
 cp ${file} ../../broker-tile/${filename}-${ver}.pivotal
+cp tile-history*.yml ../../tile-history-new/tile-history-${ver}.yml

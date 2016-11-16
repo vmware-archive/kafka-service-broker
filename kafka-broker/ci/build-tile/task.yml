@@ -7,9 +7,11 @@ inputs:
 - name: tile-repo
 - name: broker-jar
 - name: version
+- name: tile-history
 
 outputs:
 - name: broker-tile
+- name: tile-history-new
 
 run:
   path: tile-repo/kafka-broker/ci/build-tile/task.sh

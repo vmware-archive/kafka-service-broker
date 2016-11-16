@@ -3,6 +3,7 @@ groups:
   jobs:
   - build-broker
   - build-tile
+
 resources:
 
 - name: version
@@ -76,8 +77,12 @@ jobs:
       passed:
         - build-broker
     - get: version
+    - get: tile-history
   - task: build-tile
     file: tile-repo/kafka-broker/ci/build-tile/task.yml
+  - put: tile-history
+    params:
+      file: broker-tile/tile-history-*.yml
   - put: broker-tile
     params:
       file: broker-tile/*.pivotal

@@ -86,8 +86,8 @@ public class KafkaBrokerTest {
         serviceInstance.getParameters().put(KafkaBroker.TOPIC_NAME_KEY, "foo");
         Map<String, Object> m = kafkaBroker.getCredentials(serviceInstance, serviceBinding);
         assertNotNull(m);
-        assertEquals("54.86.225.103:9092,54.87.26.5:9092", m.get("hostname")); //change this to your actual hostname
-        assertEquals("kafka://54.86.225.103:9092,54.87.26.5:9092/foo", m.get("uri"));   //change to kafka's hostname and kafka's port, default is 9092
+        assertEquals("104.196.152.35:9092,104.196.198.151:9092", m.get("hostname")); //change this to your actual hostname
+        assertEquals("kafka://104.196.152.35:9092,104.196.198.151:9092/foo", m.get("uri"));   //change to kafka's hostname and kafka's port, default is 9092
         assertEquals("foo", m.get(KafkaBroker.TOPIC_NAME_KEY));  //this assumes you have a topic with the name foo
     }
 

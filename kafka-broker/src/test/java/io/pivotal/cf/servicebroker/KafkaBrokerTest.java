@@ -17,9 +17,9 @@
 
 package io.pivotal.cf.servicebroker;
 
-import io.pivotal.cf.servicebroker.model.ServiceBinding;
-import io.pivotal.cf.servicebroker.model.ServiceInstance;
-import io.pivotal.cf.servicebroker.service.BrokeredService;
+import io.pivotal.ecosystem.servicebroker.model.ServiceBinding;
+import io.pivotal.ecosystem.servicebroker.model.ServiceInstance;
+import io.pivotal.ecosystem.servicebroker.service.BrokeredService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Ignore;
 import org.junit.Test;

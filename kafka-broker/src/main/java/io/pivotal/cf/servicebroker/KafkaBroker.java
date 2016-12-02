@@ -17,9 +17,9 @@
 
 package io.pivotal.cf.servicebroker;
 
-import io.pivotal.cf.servicebroker.model.ServiceBinding;
-import io.pivotal.cf.servicebroker.model.ServiceInstance;
-import io.pivotal.cf.servicebroker.service.DefaultServiceImpl;
+import io.pivotal.ecosystem.servicebroker.model.ServiceBinding;
+import io.pivotal.ecosystem.servicebroker.model.ServiceInstance;
+import io.pivotal.ecosystem.servicebroker.service.DefaultServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;

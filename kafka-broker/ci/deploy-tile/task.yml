@@ -3,6 +3,7 @@ platform: linux
 
 image: docker:///cfplatformeng/tile-generator
 
+
 inputs:
 - name: broker-tile
 - name: version

@@ -1,5 +1,6 @@
 #!/bin/sh -ex
 
+
 TILE_FILE=`cd broker-tile; ls *.pivotal`
 if [ -z "${TILE_FILE}" ]; then
 	echo "No files matching broker-tile/*.pivotal"

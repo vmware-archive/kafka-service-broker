@@ -3,7 +3,6 @@ platform: linux
 
 image: docker:///cfplatformeng/tile-generator
 
-
 inputs:
 - name: pcf-environment
 - name: tile-repo

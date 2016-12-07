@@ -8,6 +8,10 @@ groups:
   - remove-tile
   - release-pcf
 
+- name: manual
+  jobs:
+  - manual-release-pcf
+
 resources:
 
 - name: version
@@ -161,3 +165,12 @@ jobs:
       release: pcf-environment
   - put: version
     params: {file: version/number}
+
+- name: manual-release-pcf
+  plan:
+  - get: pcf-environment
+    passed:
+    - claim-pcf
+  - put: pcf-environment
+    params:
+      release: pcf-environment

@@ -134,17 +134,18 @@ jobs:
   plan:
   - aggregate:
     - get: tile-repo
+    - get: broker-tile
     - get: pcf-environment
       passed:
         - deploy-tile
       trigger: true
-    - task: remove-tile
-      file: tile-repo/ci/remove-tile/task.yml
-      on_failure:
-        aggregate:
-        - put: pcf-environment
-          params:
-            release: pcf-environment
+  - task: remove-tile
+    file: tile-repo/kafka-broker/ci/remove-tile/task.yml
+    on_failure:
+      aggregate:
+      - put: pcf-environment
+        params:
+          release: pcf-environment
 
 - name: release-pcf
   serial_groups: [version]

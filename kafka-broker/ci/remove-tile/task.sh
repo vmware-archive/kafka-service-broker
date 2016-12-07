@@ -2,7 +2,6 @@
 
 set -e
 
-
 # echo "### Skipping remove"
 # exit 0
 

@@ -3,6 +3,10 @@ groups:
   jobs:
   - build-broker
   - build-tile
+  - claim-pcf
+  - deploy-tile
+  - remove-tile
+  - release-pcf
 
 resources:
 
@@ -14,6 +18,14 @@ resources:
     access_key_id: {{aws-key-id}}
     secret_access_key: {{aws-key}}
     initial_version: 1.0.0
+
+- name: pcf-environment
+  type: pool
+  source:
+    branch: master
+    pool: pcf
+    private_key: {{github-pool-private-key}}
+    uri: git@github.com:cf-platform-eng/pipeline-resource-pool-v2
 
 - name: tile-repo
   type: git
@@ -85,3 +97,66 @@ jobs:
   - put: broker-tile
     params:
       file: broker-tile/*.pivotal
+
+- name: claim-pcf
+  serial_groups: [version]
+  plan:
+  - aggregate:
+    - get: broker-tile
+      trigger: true
+      passed:
+      - build-tile
+  - put: pcf-environment
+    params:
+      acquire: true
+
+- name: deploy-tile
+  plan:
+  - aggregate:
+    - get: broker-tile
+      passed:
+      - claim-pcf
+      trigger: true
+    - get: pcf-environment
+      passed:
+      - claim-pcf
+    - get: tile-repo
+    - get: version
+  - task: deploy-tile
+    file: tile-repo/sample-broker/ci/deploy-tile/task.yml
+    on_failure:
+      aggregate:
+      - put: pcf-environment
+        params:
+          release: pcf-environment
+
+- name: remove-tile
+  plan:
+  - aggregate:
+    - get: tile-repo
+    - get: pcf-environment
+      passed:
+        - deploy-tile
+      trigger: true
+    - task: remove-tile
+      file: tile-repo/ci/remove-tile/task.yml
+      on_failure:
+        aggregate:
+        - put: pcf-environment
+          params:
+            release: pcf-environment
+
+- name: release-pcf
+  serial_groups: [version]
+  plan:
+  - get: pcf-environment
+    passed:
+    - remove-tile
+    trigger: true
+  - get: version
+    params: {bump: final}
+  - put: pcf-environment
+    params:
+      release: pcf-environment
+  - put: version
+    params: {file: version/number}

@@ -1,0 +1,13 @@
+---
+platform: linux
+
+image: docker:///cfplatformeng/tile-generator
+
+inputs:
+- name: broker-tile
+- name: version
+- name: pcf-environment
+- name: tile-repo
+
+run:
+  path: tile-repo/kafka-broker/ci/deploy-tile/task.sh

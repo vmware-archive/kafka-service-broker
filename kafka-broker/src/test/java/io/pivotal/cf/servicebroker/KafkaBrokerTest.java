@@ -17,10 +17,11 @@
 
 package io.pivotal.cf.servicebroker;
 
-import io.pivotal.cf.servicebroker.model.ServiceBinding;
-import io.pivotal.cf.servicebroker.model.ServiceInstance;
-import io.pivotal.cf.servicebroker.service.BrokeredService;
+import io.pivotal.ecosystem.servicebroker.model.ServiceBinding;
+import io.pivotal.ecosystem.servicebroker.model.ServiceInstance;
+import io.pivotal.ecosystem.servicebroker.service.BrokeredService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,7 @@ public class KafkaBrokerTest {
     }
 
     @Test
+    @Ignore
     public void testGetCredentials() {
         serviceInstance.getParameters().put(KafkaBroker.TOPIC_NAME_KEY, "foo");
         Map<String, Object> m = kafkaBroker.getCredentials(serviceInstance, serviceBinding);

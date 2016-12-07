@@ -29,6 +29,7 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.tomcat.jni.Time;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ import static junit.framework.TestCase.fail;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
+@Ignore
 public class JointProducerConsumer {
 
     @Autowired

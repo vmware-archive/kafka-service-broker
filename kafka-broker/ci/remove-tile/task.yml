@@ -1,0 +1,12 @@
+---
+platform: linux
+
+image: docker:///cfplatformeng/tile-generator
+
+
+inputs:
+- name: pcf-environment
+- name: tile-repo
+
+run:
+  path: tile-repo/kafka-broker/ci/remove-tile/task.sh

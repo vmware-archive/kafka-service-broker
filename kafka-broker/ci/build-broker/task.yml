@@ -7,7 +7,6 @@ image_resource:
 
 inputs:
 - name: tile-repo
-- name: simple-broker
 - name: version
 
 outputs:

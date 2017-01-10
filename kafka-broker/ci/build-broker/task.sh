@@ -1,9 +1,6 @@
 #!/bin/sh -ex
 
-cd simple-broker
-mvn -e install
-
-cd ../tile-repo
+cd tile-repo
 mvn -e install
 
 cd kafka-broker

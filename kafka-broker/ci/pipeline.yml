@@ -37,12 +37,6 @@ resources:
     branch: master
     uri: https://github.com/cf-platform-eng/kafka-service-broker
 
-- name: simple-broker
-  type: git
-  source:
-    branch: master
-    uri: https://github.com/cf-platform-eng/simple-service-broker
-
 - name: broker-tile
   type: s3
   source:
@@ -71,7 +65,6 @@ jobs:
 - name: build-broker
   serial_groups: [version]
   plan:
-  - get: simple-broker
   - get: tile-repo
     trigger: true
   - get: version

@@ -27,7 +27,7 @@ resources:
   type: pool
   source:
     branch: master
-    pool: pcf
+    pool: cholick
     private_key: {{github-pool-private-key}}
     uri: git@github.com:cf-platform-eng/pipeline-resource-pool-v2
 

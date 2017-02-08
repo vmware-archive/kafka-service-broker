@@ -69,16 +69,22 @@ class Util {
 
     List<String> getBootstrapServers() throws Exception {
         List<String> ret = new ArrayList<>();
-        ZooKeeper zk = getZooKeeper();
+        ZooKeeper zk = null;
+        try {
+            zk = getZooKeeper();
 
-        List<String> ids = zk.getChildren("/brokers/ids", false);
-        for (String id : ids) {
-            String brokerInfo = new String(zk.getData("/brokers/ids/" + id, false, null));
-            Map m = toMap(brokerInfo);
-            ret.add(m.get("host") + ":" + m.get("port"));
+            List<String> ids = zk.getChildren("/brokers/ids", false);
+            for (String id : ids) {
+                String brokerInfo = new String(zk.getData("/brokers/ids/" + id, false, null));
+                Map m = toMap(brokerInfo);
+                ret.add(m.get("host") + ":" + m.get("port"));
+            }
+            return ret;
+        } finally {
+            if(zk != null) {
+                zk.close();
+            }
         }
-
-        return ret;
     }
 
     private Map toMap(String json) throws IOException {

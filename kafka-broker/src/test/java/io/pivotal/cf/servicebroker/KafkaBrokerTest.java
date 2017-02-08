@@ -37,7 +37,6 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-
 public class KafkaBrokerTest {
 
     @Autowired
@@ -83,13 +82,10 @@ public class KafkaBrokerTest {
     }
 
     @Test
-    @Ignore
     public void testGetCredentials() {
         serviceInstance.getParameters().put(KafkaBroker.TOPIC_NAME_KEY, "foo");
         Map<String, Object> m = kafkaBroker.getCredentials(serviceInstance, serviceBinding);
         assertNotNull(m);
-        assertEquals("104.196.152.35:9092,104.196.198.151:9092", m.get("hostname")); //change this to your actual hostname
-        assertEquals("kafka://104.196.152.35:9092,104.196.198.151:9092/foo", m.get("uri"));   //change to kafka's hostname and kafka's port, default is 9092
         assertEquals("foo", m.get(KafkaBroker.TOPIC_NAME_KEY));  //this assumes you have a topic with the name foo
     }
 

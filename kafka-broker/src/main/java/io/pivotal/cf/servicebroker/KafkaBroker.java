@@ -154,7 +154,6 @@ class KafkaBroker extends DefaultServiceImpl {
 
         try {
             Map<String, Object> m = new HashMap<>();
-            //m.put("hostname", env.getProperty("BOOTSTRAP_SERVERS_CONFIG"));
             m.put("hostname", client.getBootstrapServers());
             m.put(TOPIC_NAME_KEY, instance.getParameters().get(TOPIC_NAME_KEY));
 

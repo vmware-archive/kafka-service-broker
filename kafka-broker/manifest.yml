@@ -4,13 +4,12 @@ applications:
   memory: 512M
   instances: 1
   buildpack: java_buildpack_offline
-  path: target/kafka-broker-1.0.0.jar
+  path: target/kafka-broker.jar
   services: [ redis-for-kafka ]
   env:
     SPRING_PROFILES_ACTIVE: cloud
-    API_VERSION: 2.9
-    BOOTSTRAP_SERVERS_CONFIG: 52.207.94.210:9092
-    ZOOKEEPER_HOST: 52.207.94.210:2181
+    API_VERSION: '2.10'
+    ZOOKEEPER_HOST: 104.154.136.114:2181
     ZOOKEEPER_TIMEOUT: 10000
 
 

@@ -21,7 +21,6 @@ import kafka.utils.ZkUtils;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.ZkConnection;
 import org.apache.zookeeper.ZooKeeper;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +29,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
-@Ignore
 public class UtilTest {
 
     @Autowired
@@ -51,7 +47,7 @@ public class UtilTest {
             c.connect(null);
             String s = c.getServers();
             assertNotNull(s);
-            assertEquals("52.207.94.210:2181", s);
+            assertEquals("104.154.136.114:2181", s);
         } finally {
             if (c != null) {
                 c.close();

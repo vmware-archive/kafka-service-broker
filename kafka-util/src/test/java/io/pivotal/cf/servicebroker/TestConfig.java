@@ -30,9 +30,6 @@ import org.springframework.core.env.Environment;
 @Slf4j
 class TestConfig {
 
-    @Autowired
-    Environment env;
-
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
@@ -45,6 +42,6 @@ class TestConfig {
 
     @Bean
     public KafkaClient client(Util util, Environment env) {
-        return new KafkaClient(util, env);
+        return new KafkaClient(util);
     }
 }

@@ -9,7 +9,7 @@ applications:
   env:
     SPRING_PROFILES_ACTIVE: cloud
     API_VERSION: '2.10'
-    ZOOKEEPER_HOST: 192.168.16.29:2181
+    ZOOKEEPER_HOST: <zookeeper host>:<zookeeper port>
     ZOOKEEPER_TIMEOUT: 10000
 
 

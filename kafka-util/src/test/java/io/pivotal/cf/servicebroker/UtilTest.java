@@ -21,6 +21,7 @@ import kafka.utils.ZkUtils;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.ZkConnection;
 import org.apache.zookeeper.ZooKeeper;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,15 @@ import java.util.List;
 
 import static junit.framework.TestCase.*;
 
+/**
+ * useful tests for verifying connectivity, etc. but not so useful for unit testing.
+ * if you have access to an actual kafka env, add connection info to the application.properties
+ * file and unignore this test.
+ */
+
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
+@Ignore
 public class UtilTest {
 
     @Autowired

@@ -17,53 +17,43 @@
 
 package io.pivotal.cf.servicebroker;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class KafkaClientTest {
 
-    @Autowired
     private KafkaClient client;
 
     @Autowired
     private Util util;
 
-
-    @Test
-    public void testListTopics() throws Exception {
-        List<String> s = client.listTopics();
-        assertNotNull(s);
-        assertTrue(s.size() > 0);
-    }
-
-    @Test
-    public void testCreateAndDeleteTopic() throws Exception {
-        String topicName = "topic" + System.currentTimeMillis();
-        assertFalse(client.listTopics().contains(topicName));
-
-        client.createTopic(topicName);
-        TimeUnit.SECONDS.sleep(3);
-        assertTrue(client.listTopics().contains(topicName));
-
-        client.deleteTopic(topicName);
-        TimeUnit.SECONDS.sleep(3);
-        assertFalse(client.listTopics().contains(topicName));
+    @Before
+    public void setUp() {
+        client = new KafkaClient(util);
     }
 
     @Test
     public void testGetBoots() throws Exception {
+        List<String> l = new ArrayList<>();
+        l.add("123.456.789.10:1234 ");
+        l.add("234.456.789.10:2345 ");
+        l.add("234.456.789.10:2345 ");
+        when(util.getBootstrapServers()).thenReturn(l);
         String s = client.getBootstrapServers();
         assertNotNull(s);
-        assertEquals("104.197.235.36:9092,104.154.221.209:9092,104.198.131.22:9092", s);
+        assertEquals("123.456.789.10:1234,234.456.789.10:2345,234.456.789.10:2345", s);
     }
 }

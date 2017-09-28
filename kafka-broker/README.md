@@ -1,10 +1,10 @@
-#kafka-broker
+# kafka-broker
 A cloud foundry service broker for kafka.
 
-##Prerequisites
+## Prerequisites
 The [simple-service-broker](https://github.com/cf-platform-eng/simple-service-broker) project is a dependency for the kafka broker. Please see the [README](https://github.com/cf-platform-eng/simple-service-broker/blob/master/simple-broker/README.md) for instructions on building this dependency.
   
-##Using kafka-broker
+## Using kafka-broker
 1. kafka-broker requires a redis datastore. To set this up:
   
   ```bash

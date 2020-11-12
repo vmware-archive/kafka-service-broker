@@ -1,3 +1,5 @@
+# kafka-service-broker is no longer actively maintained by VMware.
+
 # kafka-service-broker
 This is a Cloud Foundry service broker for [apache kafka](https://kafka.apache.org/documentation). It supports the dynamic creation and deletion of topics, tied to the creation and deletion of Cloud Foundry service instances. Applications can then bind to these service instances to take part in Pub/Sub message exchanges.
 
